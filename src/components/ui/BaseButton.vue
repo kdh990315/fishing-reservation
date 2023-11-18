@@ -1,0 +1,87 @@
+<template>
+	<button v-if="!link" :class="mode">
+		<slot></slot>
+	</button>
+	<router-link v-else :to="to" :class="mode">
+		<slot></slot>
+	</router-link>
+</template>
+
+<script>
+export default {
+	props: {
+		link: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		to: {
+			type: String,
+			required: false,
+			default: '/'
+		},
+		mode: {
+			type: String,
+			required: false,
+			default: null,
+		}
+	},
+}
+</script>
+
+<style lang="scss" scoped>
+button,
+a {
+	text-decoration: none;
+	padding: 0.35rem 0.8rem;
+	font: inherit;
+	background-color: #7aa5d2;
+	border: 1px solid #7aa5d2;
+	color: white;
+	cursor: pointer;
+	border-radius: 30px;
+	margin-right: 0.5rem;
+	display: inline-block;
+
+	&a:hover,
+	&a:active,
+	&button:hover,
+	&button:active {
+		background-color: #270041;
+		border-color: #270041;
+	}
+}
+
+.flat {
+	background-color: transparent;
+	color: #3a0061;
+	border: none;
+
+	&:hover,
+	&:active {
+		background-color: #edd2ff;
+	}
+}
+
+.outline {
+	background-color: transparent;
+	border-color: #270041;
+	color: #270041;
+
+	&:hover,
+	&:active {
+		background-color: #edd2ff;
+	}
+}
+
+.login {	
+	font-size: 16px;
+	padding: 5px 10px;
+	background-color: #7aa5d2;
+	border-radius: 10px;
+
+	i {
+		margin-right: 5px;
+	}
+}
+</style>
