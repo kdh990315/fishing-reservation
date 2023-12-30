@@ -51,37 +51,4 @@ a {
 		border-color: #270041;
 	}
 }
-
-.flat {
-	background-color: transparent;
-	color: #3a0061;
-	border: none;
-
-	&:hover,
-	&:active {
-		background-color: #edd2ff;
-	}
-}
-
-.outline {
-	background-color: transparent;
-	border-color: #270041;
-	color: #270041;
-
-	&:hover,
-	&:active {
-		background-color: #edd2ff;
-	}
-}
-
-.login {	
-	font-size: 16px;
-	padding: 5px 10px;
-	background-color: #7aa5d2;
-	border-radius: 10px;
-
-	i {
-		margin-right: 5px;
-	}
-}
 </style>

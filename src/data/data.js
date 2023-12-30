@@ -41,7 +41,7 @@ export const categoryData = [
 	},
 ];
 
-export 	const HotPicksData = [
+export const HotPicksData = [
 	{
 		fishName: '감성돔',
 		how: '흘림/찌 낚시',
@@ -72,4 +72,49 @@ export 	const HotPicksData = [
 		how: '다운샷/생미끼 낚시',
 		location: '남해/서해'
 	},
+];
+
+export const allFish = [
+	{
+		title: '돔류',
+		fishName: [
+			{ id: 'f1', name: '참돔' },
+			{ id: 'f2', name: '감성돔' },
+			{ id: 'f3', name: '돌돔' },
+			{ id: 'f4', name: '벵에돔' },
+		]
+	},
+	{
+		title: '두족류',
+		fishName: [
+			{ id: 'f5', name: '쭈꾸미' },
+			{ id: 'f6', name: '갑오징어' },
+			{ id: 'f7', name: '문어' },
+			{ id: 'f8', name: '무늬오징어' },
+			{ id: 'f9', name: '한치' },
+			{ id: 'f10', name: '오징어' },
+			{ id: 'f11', name: '낙지' },
+		]
+	},
+	{
+		title: '농어과',
+		fishName: [
+			{ id: 'f11', name: '우럭' },
+			{ id: 'f12', name: '광어' },
+			{ id: 'f13', name: '농어' },
+			{ id: 'f14', name: '노래미' },
+			{ id: 'f15', name: '삼치' },
+			{ id: 'f16', name: '방어' },
+			{ id: 'f17', name: '부시리' },
+			{ id: 'f18', name: '갈치' },
+			{ id: 'f19', name: '열기' },
+			{ id: 'f20', name: '전갱이' },
+			{ id: 'f21', name: '망둥어' },
+			{ id: 'f22', name: '고등어' },
+			{ id: 'f23', name: '붉바리' },
+			{ id: 'f24', name: '대구' },
+			{ id: 'f25', name: '백조기' },
+			{ id: 'f26', name: '볼락' },
+		]
+	}
 ];

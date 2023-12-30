@@ -1,17 +1,24 @@
 import { createStore } from "vuex";
+import auth from "./module/auth/index.js";
+import shipitem from "./module/shipitem/index.js";
 
 const store = createStore({
 	modules: {
 		auth: auth,
+		shipitem: shipitem,
 	},
 	state() {
 		return {
-
-		},
-		mutations,
-		getters,
-		actions
-	}
+			userId: 's3',
+		};
+	},
+	mutations: {},
+	getters: {
+		userId(state) {
+			return state.userId;
+		}
+	},
+	actions: {},
 });
 
 export default store;

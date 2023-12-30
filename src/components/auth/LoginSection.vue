@@ -1,11 +1,17 @@
 <template>
+	<base-dialog :show="!!error" title="오류가 발생하였습니다." @close="handleError">
+		<p>{{ error }}</p>
+	</base-dialog>
+	<base-dialog :show="isLoading" title="로그인중입니다..." fixed>
+		<base-loading></base-loading>
+	</base-dialog>
 	<div id="login_wrap">
 		<router-link to="/" class="logo"></router-link>
 		<h1>로그인하기</h1>
 		<form @submit.prevent="submitLoginForm">
 			<div class="form_container">
-				<input type="text" placeholder="이메일을 입력해주세요" v-model="userInfo.user_id">
-				<input type="password" placeholder="비밀번호를 입력해주세요" v-model="userInfo.user_pw">
+				<input type="text" placeholder="이메일을 입력해주세요" v-model="userInfo.email">
+				<input type="password" placeholder="비밀번호를 입력해주세요" v-model="userInfo.password">
 				<base-button to="/" mode="login">로그인하기</base-button>
 				<p>만약 계정이 없다면 <router-link to="/SignUpSection">회원가입</router-link>을 먼저 진행해주세요.</p>
 			</div>
@@ -16,31 +22,58 @@
 <script>
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
 	setup() {
 		const router = useRouter();
+		const store = useStore();
 		const userInfo = ref({
-			user_id: '',
-			user_pw: ''
+			email: '',
+			password: ''
 		});
 
-		const submitLoginForm = () => {
-			if(userInfo.value.user_id === '' || !userInfo.value.user_id.includes('@')) {
+		const isLoading = ref(false);
+		const error = ref(null);
+
+		const submitLoginForm = async () => {
+			if(userInfo.value.email === '' || !userInfo.value.email.includes('@')) {
 				alert('이메일 형식으로 작성해주세요!');
-				return
+				return;
 			}
 
-			if(userInfo.value.user_pw === '') {
+			if(userInfo.value.password === '') {
 				alert('비밀번호를 입력해주세요!');
+				return;
 			}
 			
+			isLoading.value = true;
+
+			try {
+				await store.dispatch('auth/login', {
+					email: userInfo.value.email,
+					password: userInfo.value.password,
+				});
+			} catch (err) {
+				error.value = err.message || '오류가 발생하였습니다. 잠시 후 다시 접속해주세요.';
+				alert(error);
+			}
+
+			isLoading.value = false;
+			
 			router.replace('/');
+		}
+
+		const handleError = () => {
+			error.value = null;
 		}
 
 		return {
 			userInfo,
 			submitLoginForm,
+			handleError,
+			error,
+			isLoading
 		}
 	}
 }
@@ -66,7 +99,7 @@ export default {
 		height: 150px;
 		margin-bottom: 30px;
 		display: block;
-		background-image: url('@/assets/images/logo_transparent.png');
+		background-image: url('@/assets/images/logo.png');
 		background-size: contain;
 		background-repeat: no-repeat;
 		

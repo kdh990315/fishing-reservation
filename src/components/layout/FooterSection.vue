@@ -39,7 +39,7 @@ footer {
 			width: 200px;
 			height: 100px;
 			display: block;
-			background-image: url('@/assets/images/logo_transparent.png');
+			background-image: url('@/assets/images/logo.png');
 			background-size: contain;
 			background-repeat: no-repeat;
 		}

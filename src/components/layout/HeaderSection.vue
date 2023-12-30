@@ -1,6 +1,6 @@
 <template>
 	<header>
-		<div class="header_wrap"> 
+		<div class="header_wrap">
 			<router-link to="/" class="logo"></router-link>
 
 			<nav class="header_nav">
@@ -42,7 +42,10 @@
 				<i class="fa-solid fa-magnifying-glass search_icon"></i>
 
 				<div class="login_btn">
-					<base-button :link=true to="/LoginSection"><i class="fa-solid fa-right-to-bracket"></i>로그인</base-button>
+					<base-button :link=false @click="logOut" v-if="isToken"><i
+							class="fa-solid fa-right-to-bracket"></i>로그아웃</base-button>
+					<base-button :link=true to="/LoginSection" v-else><i
+							class="fa-solid fa-right-to-bracket"></i>로그인</base-button>
 				</div>
 			</div>
 
@@ -87,43 +90,65 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default {
-    setup() {
-        //헤더
-        const subOpen = ref(null);
-        const toggleMenu = (idx) => {
-            if (subOpen.value === idx) {
-                subOpen.value = null;
-            }
-            else {
-                subOpen.value = idx;
-            }
-        };
-        //모바일헤더
-        const mobilNavBtn = ref(false);
-        const mobilsubOpen = ref(null);
-        const mobilNavActive = () => {
-            mobilNavBtn.value = !mobilNavBtn.value;
-        };
-        const mobilNavToggle = (idx) => {
-            if (mobilsubOpen.value === idx) {
-                mobilsubOpen.value = null;
-            }
-            else {
-                mobilsubOpen.value = idx;
-            }
-        };
-        return {
-            subOpen,
-            toggleMenu,
-            mobilNavBtn,
-            mobilNavActive,
-            mobilsubOpen,
-            mobilNavToggle
-        };
-    },
+	setup() {
+		const store = useStore();
+		const router = useRouter();
+		// 헤더
+		const subOpen = ref(null);
+		const toggleMenu = (idx) => {
+			if (subOpen.value === idx) {
+				subOpen.value = null;
+			}
+			else {
+				subOpen.value = idx;
+			}
+		};
+		// 모바일헤더
+		const mobilNavBtn = ref(false);
+		const mobilsubOpen = ref(null);
+		const mobilNavActive = () => {
+			mobilNavBtn.value = !mobilNavBtn.value;
+		};
+		const mobilNavToggle = (idx) => {
+			if (mobilsubOpen.value === idx) {
+				mobilsubOpen.value = null;
+			}
+			else {
+				mobilsubOpen.value = idx;
+			}
+		};
+		// 로그인/로그아웃
+		const isToken = ref(store.getters['auth/isToken']);
+
+		watch(
+			() => store.getters['auth/isToken'],
+			(newValue) => {
+				isToken.value = newValue;
+			}
+		);
+
+		//로그아웃
+		const logOut = () => {
+			store.dispatch('auth/logout');
+			router.replace('/');
+		}
+
+		return {
+			subOpen,
+			toggleMenu,
+			mobilNavBtn,
+			mobilNavActive,
+			mobilsubOpen,
+			mobilNavToggle,
+			isToken,
+			logOut
+		};
+	},
 }
 
 </script>
@@ -158,7 +183,7 @@ header {
 			width: 160px;
 			height: 80px;
 			display: block;
-			background-image: url('@/assets/images/logo_transparent.png');
+			background-image: url('@/assets/images/logo.png');
 			background-size: contain;
 			background-repeat: no-repeat;
 		}
@@ -217,7 +242,7 @@ header {
 			width: 100%;
 			box-shadow: 0px 10px 30px rgba(83, 88, 93, 0.4);
 			display: none;
-			
+
 			@media (max-width: 800px) {
 				display: block;
 			}

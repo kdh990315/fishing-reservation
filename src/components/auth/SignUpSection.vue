@@ -1,28 +1,84 @@
 <template>
+	<base-dialog :show="!!error" title="오류가 발생하였습니다." @close="handleError">
+		<p>{{ error }}</p>
+	</base-dialog>
+	<base-dialog :show="isLoading" title="처리중입니다..." fixed>
+		<base-loading></base-loading>
+	</base-dialog>
 	<div id="login_wrap">
 		<router-link to="/" class="logo"></router-link>
 		<h1>회원가입하기</h1>
-			<div class="form_container">
-				<input type="text" placeholder="이메일을 입력해주세요" class="login_form_contents">
-				<input type="password" placeholder="비밀번호를 입력해주세요" class="login_form_contents">
-				<input type="password" placeholder="비밀번호를 다시 한번 입력해주세요" class="login_form_contents">
-				<div class="captain_form">
-					<label for="CaptainCase" class="checkbox_label">선장님으로 가입하기</label>
-					<input type="checkbox" id="CaptainCase" class="checkbox">
-				</div>
-				<base-button to="/" mode="login">회원가입하기</base-button>
-				<p><router-link to="/LoginSection">로그인으로 돌아가기</router-link></p>
+		<form class="form_container" @submit.prevent="submitLoginForm">
+			<input type="text" placeholder="이메일을 입력해주세요" class="login_form_contents" v-model="userInfo.email">
+			<input type="password" placeholder="비밀번호를 입력해주세요" class="login_form_contents" v-model="userInfo.password">
+			<div class="captain_form">
+				<label for="CaptainCase" class="checkbox_label">선장님으로 가입하기</label>
+				<input type="checkbox" id="CaptainCase" class="checkbox" v-model="userInfo.captain">
 			</div>
+			<base-button to="/" mode="login">회원가입하기</base-button>
+			<p><router-link to="/LoginSection">로그인으로 돌아가기</router-link></p>
+		</form>
 	</div>
 </template>
 
 <script>
-
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
 	setup() {
-		return {
+		const router = useRouter();
+		const store = useStore();
+
+		const userInfo = ref({
+			email: '',
+			password: '',
+			captain: false,
+		});
+
+		const isLoading = ref(false);
+		const error = ref(null);
+
+		const submitLoginForm = async () => {
+			if(userInfo.value.email === '' || !userInfo.value.email.includes('@')) {
+				alert('이메일 형식으로 작성해주세요!');
+				return
+			}
+
+			if(userInfo.value.password === '') {
+				alert('비밀번호를 입력해주세요!');
+				return
+			}
 			
+			isLoading.value = true; //로딩아이콘실행
+			
+			try {
+				await store.dispatch('auth/signup', {
+					email: userInfo.value.email,
+					password: userInfo.value.password,
+					captain: userInfo.value.captain
+				});
+			} catch (err) {
+				error.value = err.message || '오류가 발생하였습니다. 잠시 후 다시 접속해주세요.'
+				alert(error.value);
+			}
+			
+			isLoading.value = false; //로딩아이콘종료
+
+			router.replace('/LoginSection');
+		}
+
+		const handleError = () => {
+			error.value = null;
+		}
+
+		return {
+			userInfo,
+			submitLoginForm,
+			isLoading,
+			error,
+			handleError
 		}
 	}
 }
@@ -48,7 +104,7 @@ export default {
 		height: 150px;
 		margin-bottom: 30px;
 		display: block;
-		background-image: url('@/assets/images/logo_transparent.png');
+		background-image: url('@/assets/images/logo.png');
 		background-size: contain;
 		background-repeat: no-repeat;
 		
