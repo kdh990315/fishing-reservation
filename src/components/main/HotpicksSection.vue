@@ -7,7 +7,8 @@
 			<ul class="hot_picks_slide_container">
 				<li class="slides" v-for="(hotPick, idx) in HotPicksData" :key="idx">
 					<div class="hot_picks_text">
-						<strong>{{ hotPick.fishName }}</strong><small>{{ hotPick.how }}</small>
+						<strong>{{ hotPick.fishName }}</strong>
+						<small>{{ hotPick.how }}</small>
 						<p>{{ hotPick.location }}</p>
 					</div>
 				</li>
@@ -23,8 +24,19 @@
 
 <script>
 import { HotPicksData } from '@/data/data.js';
+
+//hook
+import { slideAnimation } from '@/hooks/slideAnimation.js';
+import { onMounted } from 'vue';
+//hook
 export default {
 	setup() {
+		onMounted(() => {
+			const windowWidth = window.innerWidth;
+			if (windowWidth > 1200) slideAnimation(".hot_picks_slide_container", ".slides", 280, 20, 4, ".prev", ".next")
+			if (windowWidth < 1200 && windowWidth > 800) slideAnimation(".hot_picks_slide_container", ".slides", 246.6, 20, 3, ".prev", ".next")
+			if (windowWidth < 800) slideAnimation(".hot_picks_slide_container", ".slides", 146.6, 20, 3, ".prev", ".next")
+		});
 		return {
 			HotPicksData
 		}
@@ -38,6 +50,16 @@ export default {
 #hoppicks_section {
 	width: 100%;
 	margin-top: 150px;
+
+	@media (max-width: 1200px) {
+		width: 800px;
+		margin: 150px auto 0 auto;
+	}
+
+	@media (max-width: 800px) {
+		width: 500px;
+		margin: 150px auto 0 auto;
+	}
 
 	.hot_picks_title {
 
@@ -56,6 +78,10 @@ export default {
 		position: relative;
 		overflow: hidden;
 
+		@media (max-width: 800px) {
+			height: 450px;
+		}
+
 		.hot_picks_slide_container {
 			width: 100%;
 			height: 100%;
@@ -66,18 +92,16 @@ export default {
 			margin: 15px 10px 0 10px;
 			touch-action: pan-x;
 
-			@media (max-width:1200px) {
-				margin-left: 15px;
-			}
-
 			.slides {
 				width: 280px;
 				height: 350px;
 				float: left;
 				background-repeat: no-repeat;
-				background-size: cover;
+				// background-size: cover;
 				border-radius: 20px;
 				position: relative;
+				background-position: center;
+				background-size: 100% 100%;
 
 				&:hover {
 					@include hover-efect;
@@ -111,10 +135,18 @@ export default {
 					background-image: url('@/assets/images/hot_picks_img6.png');
 				}
 
+				@media (max-width: 1200px) {
+					width: 246.6px;
+				}
+
+				@media (max-width: 800px) {
+					width: 146.6px;
+				}
+
 				.hot_picks_text {
 					position: absolute;
 					left: 10px;
-					bottom: -55px;
+					bottom: -83px;
 					color: #0b0a12;
 
 					strong {
@@ -122,18 +154,31 @@ export default {
 					}
 
 					small {
-						margin-left: 5px;
 						font-size: 13px;
+						margin-left: 10px;
 					}
 
 					p {
 						letter-spacing: 1.15px;
 					}
-				}
 
-				@media (max-width: 1200px) {
-					width: 280px;
-					height: 360px;
+					@media (max-width: 800px) {
+						strong {
+							font-size: 16px;
+						}
+
+						small {
+							margin-left: 0px;
+							font-size: 12px;
+							display: block;
+
+						}
+
+						p {
+							letter-spacing: 1.15px;
+							font-size: 13px;
+						}
+					}
 				}
 			}
 		}
@@ -153,17 +198,15 @@ export default {
 			.next {
 				font-size: 25px;
 				padding: 2px 12px;
-				background-color: #ccc;
+				background-color: #f3f3f3;
+				color: #afafaf;
 				border-radius: 50%;
 				cursor: pointer;
 
-				&.active {
-					color: #9f9f9f;
+				&.btn_on {
+					background-color: #ccc;
+					color: #000;
 				}
-			}
-
-			@media (max-width: 1200px) {
-				display: none;
 			}
 		}
 	}

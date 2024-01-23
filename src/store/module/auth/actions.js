@@ -17,12 +17,16 @@ export default {
 			const error = new Error(responseData.message || '인증 과정에서 문제가 발생혀였습니다.');
 			throw error;
 		}
+
+		console.log(responseData);
+		context.commit('setUserId', {
+			userId: responseData.localId
+		}, { root: true });
 		
 		context.commit('setUser', {
 			token: responseData.idToken,
 			userID: responseData.localId,
 			tokenExpiration: responseData.expiresIn,
-			captain: responseData.captain
 		});
 
 		const expiresIn = +responseData.expiresIn * 1000;
@@ -35,7 +39,6 @@ export default {
 		localStorage.setItem('token', responseData.idToken);
 		localStorage.setItem('userId', responseData.localId);
 		localStorage.setItem('tokenExpiration', expiration);
-
 	},
 	async signup(context, payload) {
 		const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAgS9gPUCK2Pfd-assFgSZe2mpK094JQIA', {
@@ -44,7 +47,6 @@ export default {
 				email: payload.email,
 				password: payload.password,
 				returnSecureToken: true,
-				captain: false,
 			})
 		});
 		
@@ -58,7 +60,7 @@ export default {
 		context.commit('setUser', {
 			token: responseData.idToken,
 			userID: responseData.localId,
-			tokenExpiration: responseData.expiresIn
+			tokenExpiration: responseData.expiresIn,
 		});
 	},
 	autoLogin(context) {
@@ -90,6 +92,10 @@ export default {
 		localStorage.removeItem('tokenExpiration');
 
 		clearInterval(timer);
+
+		context.commit('setUserId', {
+			userId: null
+		}, { root: true });
 
 		context.commit('setUser', {
 			token: null,

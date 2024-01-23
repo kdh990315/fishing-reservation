@@ -6,6 +6,10 @@
 				<input type="text" placeholder="선박명을 입력해주세요" v-model="shipData.shipName">
 			</div>
 			<div class="form_container">
+				<label>선박 이미지 등록하기(최대 3장)</label>
+				<input multiple type="file" accept="image/*" @change="fileChange">
+			</div>
+			<div class="form_container">
 				<label>최대 승선 인원</label>
 				<input type="text" placeholder="ex) 12" v-model="shipData.people">
 			</div>
@@ -75,8 +79,11 @@ import BaseFishdata from '@/components/ui/BaseFishdata.vue';
 
 //hook
 import { fishSearch } from '@/hooks/fishSearch.js';
-import store from '@/store';
+
 import router from '@/router';
+
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useStore } from 'vuex';
 
 export default {
 	components: {
@@ -84,6 +91,8 @@ export default {
 	},
 	setup() {
 		const selectedFishId = ref([]);
+
+		const store = useStore();
 
 		//**데이터**
 		const shipData = ref({
@@ -95,14 +104,44 @@ export default {
 			// toTalTime: departureTime - arrivalTime,
 			departurePlace: '', //출항지
 			departureAddress: '', //출항지 주소
+			location: '',
 			lat: '', //좌표x
 			lng: '', //좌표y
 			fishName: [], //어종
 			fishingType: '', //낚시방법
 			introText: '', //인삿말
 			message: '', //전달사항
+			// imgFile: '', //선박 이미지
 		});
 		//**데이터**
+
+		//**선박 이미지 저장**
+		const fileChange = (e) => {
+			const shipimgfiles = e.target.files;
+			console.log(e.target.files);
+
+			if (shipimgfiles.length > 0) {
+				uploadImages(shipimgfiles);
+			}
+		}
+
+		const uploadImages = async (files) => {
+			const storage = getStorage();
+			const userId = store.getters.userId.userId;
+
+			for (let i = 0; i < files.length; i++) {
+				const file = files[i];
+				const storageRefPath = `images/${userId}/img${i}`;
+				const storageRef1 = storageRef(storage, storageRefPath);
+
+				await uploadBytes(storageRef1, file);
+
+				const imageUrl = await getDownloadURL(storageRef1);
+				
+				console.log('Uploaded Image URL:', imageUrl);
+			}
+		}
+		//**선박 이미지 저장**
 
 		//**카카오 지도**
 		const searchData = ref({
@@ -120,7 +159,6 @@ export default {
 			/* global kakao */
 			script.onload = () => kakao.maps.load(initMap);
 			script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=0700e8a59649fa1750ac6f51c839e252&autoload=false&libraries=services';
-
 			document.head.appendChild(script);
 		});
 
@@ -193,8 +231,8 @@ export default {
 		const addLatLng = (locationData, idx) => {
 			shipData.value.departurePlace = locationData.place_name;
 			shipData.value.departureAddress = locationData.address_name;
-			shipData.value.lat = locationData.x;
-			shipData.value.lng = locationData.y;
+			shipData.value.lat = locationData.y;
+			shipData.value.lng = locationData.x;
 
 			const locationOj = document.querySelectorAll('.place');
 
@@ -206,9 +244,6 @@ export default {
 		}
 
 		//**카카오 지도**
-
-
-
 
 		//**시간변환**
 		// const changeTime = computed(() =>{ 
@@ -258,8 +293,12 @@ export default {
 		});
 		//**placeholder**
 
+		const asd = () => {
+			shipData.value.location = shipData.value.departureAddress.split(' ')[0];
+		}
+
 		const submitForm = () => {
-			console.log(shipData.value);
+			asd();
 			store.dispatch('shipitem/registerShip', shipData.value);
 
 			router.replace('/ShipList');
@@ -278,8 +317,9 @@ export default {
 			keyword,
 			searchKeyword,
 			searchData,
-			addLatLng
+			addLatLng,
 			//kakao map
+			fileChange
 		}
 	}
 }

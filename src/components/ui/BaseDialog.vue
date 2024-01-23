@@ -11,9 +11,7 @@
 				<slot></slot>
 			</div>
 			<menu v-if="!fixed">
-				<slot name="actions">
-					<base-button @click="tryClose">Close</base-button>
-				</slot>
+				<base-button @click="tryClose">닫기</base-button>
 			</menu>
 		</dialog>
 	</teleport>
@@ -39,10 +37,10 @@ export default {
 	},
 	methods: {
 		tryClose() {
-			if(this.fixed) {
+			if (this.fixed) {
 				return;
 			}
-			this.$emits('close');
+			this.$emit('tryClose');
 		}
 	}
 }
@@ -61,23 +59,24 @@ export default {
 
 dialog {
 	position: fixed;
-    top: 20vh;
-    left: 30%;
-    width: 40%;
-    z-index: 100;
-    border-radius: 12px;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    background-color: white;
+	top: 20vh;
+	left: 30%;
+	width: 40%;
+	z-index: 100;
+	border-radius: 12px;
+	border: none;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	background-color: white;
 
 	header {
 		background-color: #7aa5d2;
 		color: white;
 		width: 100%;
 		padding: 1rem;
+		text-align: center;
 	}
 
 	div {

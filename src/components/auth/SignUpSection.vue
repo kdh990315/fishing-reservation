@@ -11,10 +11,6 @@
 		<form class="form_container" @submit.prevent="submitLoginForm">
 			<input type="text" placeholder="이메일을 입력해주세요" class="login_form_contents" v-model="userInfo.email">
 			<input type="password" placeholder="비밀번호를 입력해주세요" class="login_form_contents" v-model="userInfo.password">
-			<div class="captain_form">
-				<label for="CaptainCase" class="checkbox_label">선장님으로 가입하기</label>
-				<input type="checkbox" id="CaptainCase" class="checkbox" v-model="userInfo.captain">
-			</div>
 			<base-button to="/" mode="login">회원가입하기</base-button>
 			<p><router-link to="/LoginSection">로그인으로 돌아가기</router-link></p>
 		</form>
@@ -34,7 +30,6 @@ export default {
 		const userInfo = ref({
 			email: '',
 			password: '',
-			captain: false,
 		});
 
 		const isLoading = ref(false);
@@ -57,7 +52,6 @@ export default {
 				await store.dispatch('auth/signup', {
 					email: userInfo.value.email,
 					password: userInfo.value.password,
-					captain: userInfo.value.captain
 				});
 			} catch (err) {
 				error.value = err.message || '오류가 발생하였습니다. 잠시 후 다시 접속해주세요.'
@@ -123,13 +117,6 @@ export default {
 			margin-bottom: 20px;
 			font-size: 18px;
 			width: 300px;
-		}
-
-		.captain_form {
-			margin-bottom: 30px;
-			.checkbox_label {
-				margin-right: 5px;
-			}
 		}
 
 		p {

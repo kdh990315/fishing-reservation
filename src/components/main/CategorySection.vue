@@ -5,12 +5,14 @@
 		</div>
 		<div class="category_container">
 			<div class="category_item_wrap" v-for="(category, idx) in categoryData" :key="idx">
-				<div class="category_item">
-					<div class="category_div">
-						<img :src="category.src" :alt="category.alt" class="category_icon">
-						<p>{{ category.title }}</p>
+				<router-link :to="category.link">
+					<div class="category_item">
+						<div class="category_div">
+							<img :src="category.src" :alt="category.alt" class="category_icon">
+							<p>{{ category.title }}</p>
+						</div>
 					</div>
-				</div>
+				</router-link>
 			</div>
 		</div>
 	</section>

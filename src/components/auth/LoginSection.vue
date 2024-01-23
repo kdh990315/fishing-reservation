@@ -1,8 +1,8 @@
 <template>
-	<base-dialog :show="!!error" title="오류가 발생하였습니다." @close="handleError">
+	<base-dialog :show="!!error" title="오류가 발생하였습니다." @tryClose="handleError">
 		<p>{{ error }}</p>
 	</base-dialog>
-	<base-dialog :show="isLoading" title="로그인중입니다..." fixed>
+	<base-dialog :show="isLoading" title="로그인중입니다..." :fixed=true>
 		<base-loading></base-loading>
 	</base-dialog>
 	<div id="login_wrap">

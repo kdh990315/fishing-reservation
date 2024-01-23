@@ -9,7 +9,6 @@ export default {
 			userId: null,
 			token: null,
 			tokenExpiration: null,
-			captain: false,
 		};
 	},
 	mutations,

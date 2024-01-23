@@ -31,6 +31,10 @@
 				<h1 class="title">출항지</h1>
 				<div id="map"></div>
 			</div>
+			<div class="ship_disc">
+				<h1 class="title">선장님의 한마디</h1>
+				<p>{{ shipData.message }}</p>
+			</div>
 			<div class="refund_rule">
 				<h1 class="title">취소 및 환불규정</h1>
 				<p>- 출항일 기준 7일전 : 100% 환불</p>
@@ -69,7 +73,7 @@ export default {
 			// script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=0700e8a59649fa1750ac6f51c839e252&autoload=false&libraries=services';
 			// document.head.appendChild(script);
 			loadScript();
-			console.log(data);
+			store.dispatch('shipitem/setShipData');
 		});
 
 		//카카오 지도
@@ -93,7 +97,6 @@ export default {
 
 		//지도생성
 		const initMap = () => {
-			console.log(shipData.value.lat, shipData.value.lon);
 			const mapContainer = document.getElementById('map');
 			const option = {
 				center: new kakao.maps.LatLng(shipData.value.lat, shipData.value.lon),
@@ -101,7 +104,6 @@ export default {
 			};
 
 			const map = new kakao.maps.Map(mapContainer, option);
-			console.log(mapContainer, option);
 			//마커를 생성
 			var markerPosition = new kakao.maps.LatLng(shipData.value.lat, shipData.value.lon);
 
@@ -162,6 +164,7 @@ export default {
 		.ship_discription {
 			p {
 				color: #5c5c5c;
+				white-space: pre-line;
 			}
 		}
 
@@ -178,6 +181,7 @@ export default {
 
 			p {
 				color: #5c5c5c;
+				white-space: pre-line;
 			}
 		}
 
@@ -189,6 +193,12 @@ export default {
 			}
 		}
 
+		.ship_disc {
+			p {
+				color: #5c5c5c;
+				white-space: pre-line;
+			}
+		}
 		.refund_rule {
 			p {
 				color: #5c5c5c;
