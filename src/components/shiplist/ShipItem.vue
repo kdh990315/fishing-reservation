@@ -1,14 +1,14 @@
 <template>
 	<base-loading v-if="isLoading"></base-loading>
-	<article id="ship_list" v-for="(shipData, idx) in shipDatas" :key="shipData.id">
-		<div class="ship_info1">
+	<article v-else id="ship_list" v-for="(shipData, idx) in shipDatas" :key="shipData.id">
+		<div class="ship_info">
 			<div class="ship_img">
-				<img :src="shipLoadImg(shipData.id, idx)" alt="선박이미지" :id="'shipimgdata_' + idx">
+				<img :src="shipImages[idx]" alt="선박이미지" :id="'shipimgdata_' + idx">
 			</div>
 			<div class="ship_detail">
 				<div class="ship_title">
-					<h1>{{ shipData.name }}<span>[{{ shipData.location }} / {{ shipData.port }}]</span></h1>
-					<span>{{ shipData.fishName }}</span><small>{{ shipData.fishingType }}</small>
+					<h1>{{ shipData.name }}</h1><span>[{{ shipData.location }} / {{ shipData.port }}]</span><br>
+					<span class="fish_name">{{ shipData.fishName }}</span><small>{{ shipData.fishingType }}</small>
 				</div>
 				<div class="ship_detail_btn_wrap">
 					<base-button :link=false @click="showDetail(shipData.id)">자세히 보기</base-button>
@@ -16,10 +16,11 @@
 			</div>
 		</div>
 	</article>
+	<h2 v-if="notFound && !isLoading">등록된 선박이 없습니다.</h2>
 </template>
 
 <script>
-import { computed, onMounted, ref} from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useStore } from 'vuex';
 
 import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage';
@@ -31,40 +32,63 @@ export default {
 
 		const isLoading = ref(false);
 
-		const shipDatas = computed(() => {
-			return store.getters['shipitem/ships'];
-		})
+		const shipDatas = computed(() => store.getters['shipitem/ships']);
 
 		const showDetail = (shipId) => {
 			emit('showShipDetail', shipId);
-		}
+		};
 
-		const shipLoadImg = async (shipId, idx) => {
+		const shipImages = ref([]);
+
+		const fetchImages = async () => {
 			const storage = getStorage();
-			
-			// const storageRefPath = `gs://fishing-reservation-54646.appspot.com/images/` + shipId + `/img0`;
-			const storageRefPath = `images/${shipId}/img0`;
-			const storageRef1 = storageRef(storage, storageRefPath);
+
+			for (let i = 0; i < shipDatas.value.length; i++) {
+				const storageRef1 = storageRef(storage, `images/${shipDatas.value[i].id}/img0`);
+				try {
+					const imgUrl = await getDownloadURL(storageRef1);
+					shipImages.value[i] = imgUrl;
+				} catch (error) {
+					alert(error);
+				}
+			}
+		};
+
+		onMounted(async () => {
+			isLoading.value = true;
 
 			try {
-				const imgUrl = await getDownloadURL(storageRef1);
-				const img = document.getElementById('shipimgdata_' + idx);
-				img.setAttribute('src', imgUrl);
-			} catch (error) {
-				alert(error);
-				return;
-			}
-		}
+				await store.dispatch('shipitem/setShipData');
 
-		onMounted(() => {
-			store.dispatch('shipitem/setShipData');
+				await fetchImages();
+			} catch(error) {
+				alert(error);
+			} finally {
+				isLoading.value = false;
+			}
+			
+		});
+
+		const shipdata = computed(() => {
+			return store.getters['shipitem/ships'];
+		});
+
+		const notFound = ref(false);
+
+		watchEffect(() => {
+			if (shipdata.value.length === 0) {
+				notFound.value = true;
+			} else {
+				notFound.value = false;
+			}
 		});
 
 		return {
 			shipDatas,
 			showDetail,
 			isLoading,
-			shipLoadImg
+			shipImages,
+			notFound
 		}
 	}
 }
@@ -77,7 +101,7 @@ export default {
 	border-radius: 20px;
 	margin-top: 20px;
 
-	.ship_info1 {
+	.ship_info {
 		display: flex;
 
 		.ship_img {
@@ -100,15 +124,36 @@ export default {
 
 				h1 {
 					font-size: 26px;
+					display: inline-block;
+				}
+				
+				span {
+					font-size: 20px;
+					margin-left: 10px;
+				}
 
-					span {
-						font-size: 22px;
-						margin-left: 10px;
-					}
+				.fish_name {
+					font-size: 18px;
 				}
 
 				small {
 					margin-left: 5px;
+				}
+
+				@media (max-width: 800px) {
+					h1 {
+						display: block;
+						font-size: 4.1vw;
+					}
+
+					span {
+						margin-left: 0;
+						font-size: 3.0vw;
+					}
+
+					.fish_name {
+						font-size: 2.6vw;
+					}
 				}
 			}
 		}

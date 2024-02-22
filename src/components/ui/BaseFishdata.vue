@@ -41,6 +41,10 @@ export default {
 	border-radius: 15px;
 	padding: 5px;
 	margin-bottom: 15px;
+	position: relative;
+	z-index: 1000000000;
+	background-color: #fff;
+	margin-top: 10px;
 
 	.form_section {
 		margin-bottom: 15px;

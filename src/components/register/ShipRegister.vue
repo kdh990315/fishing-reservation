@@ -1,39 +1,56 @@
 <template>
 	<section id="register_section">
 		<form @submit.prevent="submitForm">
-			<div class="form_container">
+			<div class="form_container ship_name">
 				<label>선박명</label>
-				<input type="text" placeholder="선박명을 입력해주세요" v-model="shipData.shipName">
+				<input type="text" placeholder="선박명을 입력해주세요" v-model="shipData.shipName.val" @blur="clearValid('shipName')">
+				<p class="error" v-if="shipData.shipName.valid">선박명을 입력해주세요</p>
 			</div>
 			<div class="form_container">
 				<label>선박 이미지 등록하기(최대 3장)</label>
 				<input multiple type="file" accept="image/*" @change="fileChange">
 			</div>
-			<div class="form_container">
+			<div class="form_container ship_people">
 				<label>최대 승선 인원</label>
-				<input type="text" placeholder="ex) 12" v-model="shipData.people">
+				<input type="number" placeholder="ex) 12" v-model="shipData.people.val" @blur="clearValid('people')">
+				<p class="error" v-if="shipData.people.valid">최대 승선 인원을 입력해주세요</p>
 			</div>
-			<div class="form_container">
+			<div class="form_container ship_price">
 				<label>비용</label>
-				<input type="text" placeholder="ex) 120000" v-model="shipData.price">
+				<input type="number" placeholder="ex) 120000" v-model="shipData.price.val" @blur="clearValid('price')">
+				<p class="error" v-if="shipData.price.valid">비용을 입력해주세요</p>
 			</div>
-			<div class="form_container">
+			<div class="form_container ship_time">
 				<label>출항시간</label>
-				<input type="time" v-model="shipData.departureTime">
+				<input type="time" v-model="shipData.departureTime.val" class="ship_time_input"
+					@blur="clearValid('departureTime')">
 				<label>입항시간</label>
-				<input type="time" v-model="shipData.arrivalTime">
+				<input type="time" v-model="shipData.arrivalTime.val" class="ship_time_input"
+					@blur="clearValid('arrivalTime')">
 				<span v-if="changeTime.hours * changeTime.minutes > -1">({{ changeTime.hours }}시간 {{
 					changeTime.minutes }}분)</span>
+				<div>
+					<label for="0">시간배</label>
+					<input type="radio" name="halfOption" v-model="shipData.halfOption.val" id="0" value="시간배"
+						@blur="clearValid('halfOption')">
+					<label for="1">종일배</label>
+					<input type="radio" name="halfOption" v-model="shipData.halfOption.val" id="1" value="종일배"
+						@blur="clearValid('halfOption')">
+				</div>
+				<p class="error" v-if="shipData.departureTime.valid && shipData.arrivalTime.valid">출항시간과 입항시간을 입력해주세요</p>
 			</div>
-			<div class="form_container">
+			<div class="form_container ship_map">
 				<label>출항지</label>
+				<p class="error" v-if="shipData.departurePlace.valid">출항지를 선택해주세요</p>
 				<div id="map_wrap">
 					<div id="map"></div>
 					<div id="search_box">
-						<form @submit.prevent="searchKeyword">장소 검색 : <input type="text" v-model="keyword"><button>확인</button></form>
+						<form @submit.prevent="searchKeyword">장소 검색 : <input type="text"
+								v-model="keyword"><button>검색하기</button></form>
 					</div>
 					<div id="result">
-						<div class="place" v-for="(location, idx) in searchData.result" :key="location.id" @click="addLatLng(location, idx)">
+						<div class="place" v-for="(location, idx) in searchData.result" :key="location.id"
+							@click="addLatLng(location, idx), clearValid('departurePlace')">
 							<h5>{{ location.place_name }}</h5>
 							<span>{{ location.address_name }}</span>
 						</div>
@@ -42,33 +59,35 @@
 			</div>
 			<div class="form_container fishplaceholder">
 				<label>대표어종</label>
-				<input type="text" :placeholder="selectedFishPlaceholder" @click="open">
+				<input type="text" :placeholder="selectedFishPlaceholder" @click="open" @blur="clearValid('fishName')">
 				<base-fishdata v-if="isvisible" @trysubmit="tryClose"></base-fishdata>
+				<p class="error" v-if="shipData.fishName.valid">대표어종을 선택해주세요</p>
 			</div>
-			<div class="form_container">
-				<label>낚시방법</label>
-				<div>
-					<input type="radio" name="fishingType" id="1" value="생미끼 외수질" v-model="shipData.fishingType">
-					<label for="1">생미끼 외수질</label>
+			<div class="form_container ship_fishingtype">
+				<div class="fishingtype_wrap">
+					<label class="fishingtype_title">낚시방법<span class="error" v-if="shipData.fishingType.valid">낚시 방법을
+							선택해주세요</span></label>
+					<div v-for="fishingType in fishingTypeData" :key="fishingType.id" class="fishing_type">
+						<input type="radio" name="fishingType" :id="fishingType.id" :value="fishingType.value"
+							v-model="shipData.fishingType.val" @blur="clearValid('fishingType')">
+						<label :for="fishingType.id">{{ fishingType.value }}</label>
+					</div>
 				</div>
-				<div>
-					<input type="radio" name="fishingType" id="2" value="침선" v-model="shipData.fishingType">
-					<label for="2">침선</label>
-				</div>
-				<div>
-					<input type="radio" name="fishingType" id="3" value="타이라바" v-model="shipData.fishingType">
-					<label for="3">타이라바</label>
-				</div>
+
 			</div>
-			<div class="form_container">
+			<div class="form_container ship_msg">
 				<label for="intro_text">인사말</label>
-				<textarea name="intro_text" id="intro_text" cols="30" rows="10" v-model="shipData.introText"></textarea>
+				<p class="error" v-if="shipData.introText.valid">인사말을 입력해주세요</p>
+				<textarea name="intro_text" id="intro_text" cols="30" rows="10" v-model="shipData.introText.val"
+					@blur="clearValid('introText')"></textarea>
 			</div>
-			<div class="form_container">
+			<div class="form_container ship_msg">
 				<label for="message">전달사항</label>
-				<textarea name="message" id="message" cols="30" rows="10" v-model="shipData.message"></textarea>
+				<p class="error" v-if="shipData.message.valid">전달사항을 입력해주세요</p>
+				<textarea name="message" id="message" cols="30" rows="10" v-model="shipData.message.val"
+					@blur="clearValid('message')"></textarea>
 			</div>
-			<base-button>등록하기</base-button>
+			<base-button mode="register_btn">등록하기</base-button>
 		</form>
 	</section>
 </template>
@@ -85,6 +104,9 @@ import router from '@/router';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useStore } from 'vuex';
 
+//data 
+import { fishingType } from '@/data/data.js';
+
 export default {
 	components: {
 		BaseFishdata,
@@ -95,30 +117,80 @@ export default {
 		const store = useStore();
 
 		//**데이터**
+		const fishingTypeData = fishingType;
+
 		const shipData = ref({
-			shipName: '', //선박명
-			people: '', //승선인원
-			price: '', //가격
-			departureTime: '', //출항시간
-			arrivalTime: '', //입항시간
-			// toTalTime: departureTime - arrivalTime,
-			departurePlace: '', //출항지
-			departureAddress: '', //출항지 주소
-			location: '',
-			lat: '', //좌표x
-			lng: '', //좌표y
-			fishName: [], //어종
-			fishingType: '', //낚시방법
-			introText: '', //인삿말
-			message: '', //전달사항
-			// imgFile: '', //선박 이미지
+			shipName: {
+				val: '',
+				valid: false,
+			},
+			people: {
+				val: '',
+				valid: false,
+			},
+			price: {
+				val: '',
+				valid: false,
+			},
+			departureTime: {
+				val: '',
+				valid: false,
+			},
+			arrivalTime: {
+				val: '',
+				valid: false,
+			},
+			halfOption: {
+				val: '',
+				valid: false,
+			},
+			departurePlace: {
+				val: '',
+				valid: false,
+			},
+			departureAddress: {
+				val: '',
+				valid: false,
+			},
+			location: {
+				val: '',
+				valid: false,
+			},
+			lat: {
+				val: '',
+				valid: false,
+			},
+			lng: {
+				val: '',
+				valid: false,
+			},
+			fishName: {
+				val: [],
+				valid: false,
+			},
+			fishingType: {
+				val: '',
+				valid: false,
+			},
+			introText: {
+				val: '',
+				valid: false,
+			},
+			message: {
+				val: '',
+				valid: false,
+			},
 		});
 		//**데이터**
+
+		const clearValid = (input) => {
+			shipData.value[input].valid = false;
+		}
+
 
 		//**선박 이미지 저장**
 		const fileChange = (e) => {
 			const shipimgfiles = e.target.files;
-			console.log(e.target.files);
 
 			if (shipimgfiles.length > 0) {
 				uploadImages(shipimgfiles);
@@ -137,7 +209,7 @@ export default {
 				await uploadBytes(storageRef1, file);
 
 				const imageUrl = await getDownloadURL(storageRef1);
-				
+
 				console.log('Uploaded Image URL:', imageUrl);
 			}
 		}
@@ -166,7 +238,7 @@ export default {
 			const mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 				mapOption = {
 					center: new kakao.maps.LatLng(LatLng.value.lat, LatLng.value.lng), // 지도의 중심좌표
-					level: 3 // 지도의 확대 레벨
+					level: 7 // 지도의 확대 레벨
 				};
 
 			// 지도를 생성합니다    
@@ -178,15 +250,13 @@ export default {
 			var marker = new kakao.maps.Marker({
 				position: markerPosition
 			});
-
 			marker.setMap(map);
 
 			return map;
 		}
 		const keyword = ref('');
-		
+
 		const searchKeyword = () => {
-			// const keyword = e.target.value.trim();
 
 			if (keyword.value === '') {
 				alert('출항지 주소를 입력해주세요!');
@@ -199,10 +269,8 @@ export default {
 			// 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
 			ps.keywordSearch(keyword.value, placesSearchCB);
 
-			function placesSearchCB(data, status, pagination) {
+			function placesSearchCB(data, status) {
 				searchData.value.result = data;
-				console.log(data)
-				console.log('status ' + status);
 
 				if (status === kakao.maps.services.Status.ZERO_RESULT) {
 					alert('검색 결과가 존재하지 않습니다.');
@@ -212,27 +280,45 @@ export default {
 					return;
 				}
 
-				console.log(pagination);
+				let bounds = new kakao.maps.LatLngBounds();
 
-				// let bounds = new kakao.maps.LatLngBounds();
+				for (var i = 0; i < data.length; i++) {
+					// 마커를 생성하고 지도에 표시합니다
+					let marker = new kakao.maps.Marker({
+						map: map,
+						position: new kakao.maps.LatLng(data[i].y, data[i].x)
+					});
+					bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+					marker.setMap(map);
+				}
 
-				// for(let i = 0; i < data.length; i++) {
-				// 	var placePosition = new kakao.maps.LatLng(data[i].y, data[i].x);
-				// }
+				const mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+					mapOption = {
+						center: new kakao.maps.LatLng(LatLng.value.lat, LatLng.value.lng), // 지도의 중심좌표
+						level: 7 // 지도의 확대 레벨
+					};
 
-				// bounds.extend(placePosition);
-				// console.log(bounds);
-				// console.log(placePosition);
+				// 지도를 생성합니다    
+				var map = new kakao.maps.Map(mapContainer, mapOption);
 
-				// map.setBounds(bounds);
+
+				//마커를 생성
+				var markerPosition = new kakao.maps.LatLng(LatLng.value.lat, LatLng.value.lng);
+
+				var marker = new kakao.maps.Marker({
+					position: markerPosition
+				});
+				marker.setMap(map);
+
+				map.setBounds(bounds);
 			}
 		}
 
 		const addLatLng = (locationData, idx) => {
-			shipData.value.departurePlace = locationData.place_name;
-			shipData.value.departureAddress = locationData.address_name;
-			shipData.value.lat = locationData.y;
-			shipData.value.lng = locationData.x;
+			shipData.value.departurePlace.val = locationData.place_name;
+			shipData.value.departureAddress.val = locationData.address_name;
+			shipData.value.lat.val = locationData.y;
+			shipData.value.lng.val = locationData.x;
 
 			const locationOj = document.querySelectorAll('.place');
 
@@ -259,8 +345,8 @@ export default {
 		const changeTime = ref({ hours: 0, minutes: 0 });
 
 		watchEffect(() => {
-			const departure = new Date(`2020-01-01T${shipData.value.departureTime}`);
-			const arrival = new Date(`2020-01-01T${shipData.value.arrivalTime}`);
+			const departure = new Date(`2020-01-01T${shipData.value.departureTime.val}`);
+			const arrival = new Date(`2020-01-01T${shipData.value.arrivalTime.val}`);
 			const differenceTime = arrival - departure;
 
 			changeTime.value.hours = Math.floor(differenceTime / (1000 * 60 * 60));
@@ -282,24 +368,62 @@ export default {
 			isvisible.value = false;
 			selectedFishId.value = selectFish;
 
-			shipData.value.fishName = fishSearch(selectedFishId.value);
+			shipData.value.fishName.val = fishSearch(selectedFishId.value);
 		}
 		//**어종선택창**
 
 
 		//**placeholder**
 		const selectedFishPlaceholder = computed(() => {
-			return shipData.value.fishName.join(', ');
+			return shipData.value.fishName.val.length > 0 ? shipData.value.fishName.val.join(', ') : "클릭하여 어종을 선택해주세요";
 		});
 		//**placeholder**
 
-		const asd = () => {
-			shipData.value.location = shipData.value.departureAddress.split(' ')[0];
+		//지역 이름 반환
+		const locationReturn = () => {
+			shipData.value.location.val = shipData.value.departureAddress.val.split(' ')[0];
 		}
 
+		//데이터 제출
 		const submitForm = () => {
-			asd();
-			store.dispatch('shipitem/registerShip', shipData.value);
+			locationReturn();
+
+			// 유효성 검사
+			let isValid = false;
+
+			for (const key in shipData.value) {
+				if (shipData.value[key].val === '' || shipData.value[key].val.length === 0) {
+					shipData.value[key].valid = true;
+					isValid = false;
+				}
+			}
+
+			if (!isValid) {
+				return;
+			}
+
+			const formData = {
+				shipName: shipData.value.shipName.val,
+				people: shipData.value.people.val,
+				price: shipData.value.price.val,
+				departureTime: shipData.value.departureTime.val,
+				arrivalTime: shipData.value.arrivalTime.val,
+				halfOption: shipData.value.halfOption.val,
+				departurePlace: shipData.value.departurePlace.val,
+				departureAddress: shipData.value.departureAddress.val,
+				location: shipData.value.location.val,
+				lat: shipData.value.lat.val,
+				lng: shipData.value.lng.val,
+				fishName: shipData.value.fishName.val,
+				fishingType: shipData.value.fishingType.val,
+				introText: shipData.value.introText.val,
+				message: shipData.value.message.val,
+			}
+			store.dispatch('shipitem/registerShip', formData);
+
+			for (const key in shipData.value) {
+				shipData.value[key].valid = false;
+			}
 
 			router.replace('/ShipList');
 		}
@@ -319,7 +443,9 @@ export default {
 			searchData,
 			addLatLng,
 			//kakao map
-			fileChange
+			fileChange,
+			fishingTypeData,
+			clearValid
 		}
 	}
 }
@@ -328,10 +454,112 @@ export default {
 <style lang="scss" scoped>
 #register_section {
 	width: 1200px;
-	margin: 0 auto;
+	margin: 30px auto 0 auto;
 	border: 1px solid #ccc;
+	padding: 10px;
+	border-radius: 25px;
+
+	@media (max-width: 1200px) {
+		width: calc(100% - 50px);
+	}
 
 	.form_container {
+		margin: 10px 0 0 10px;
+
+		.error {
+			font-size: 13px;
+			color: red;
+		}
+	}
+
+	.ship_name {
+
+		input {
+			width: 300px;
+			height: 30px;
+			padding-left: 10px;
+			margin-left: 8px;
+			background-color: #e1e1e1;
+			font-size: 15px;
+			border: 0;
+			border-radius: 15px;
+			outline: none;
+		}
+	}
+
+	.ship_people {
+
+		input {
+			width: 100px;
+			height: 30px;
+			padding-left: 10px;
+			margin-left: 8px;
+			background-color: #e1e1e1;
+			font-size: 15px;
+			border: 0;
+			border-radius: 15px;
+			outline: none;
+
+			&::-webkit-inner-spin-button {
+				appearance: none;
+				-moz-appearance: none;
+				-webkit-appearance: none;
+			}
+		}
+	}
+
+	.ship_price {
+
+		input {
+			width: 150px;
+			height: 30px;
+			padding-left: 10px;
+			margin-left: 8px;
+			background-color: #e1e1e1;
+			font-size: 15px;
+			border: 0;
+			border-radius: 15px;
+			outline: none;
+
+			&::-webkit-inner-spin-button {
+				appearance: none;
+				-moz-appearance: none;
+				-webkit-appearance: none;
+			}
+		}
+	}
+
+	.ship_time {
+
+		.ship_time_input {
+			width: 120px;
+			height: 30px;
+			padding-left: 10px;
+			padding-right: 5px;
+			margin-left: 8px;
+			background-color: #e1e1e1;
+			font-size: 13px;
+			border: 0;
+			border-radius: 15px;
+			outline: none;
+		}
+
+		div {
+			display: inline-block;
+			margin-left: 5px;
+
+			label {
+				margin-right: 3px;
+			}
+
+			input {
+				border: 1px solid #ccc;
+				margin-right: 5px;
+			}
+		}
+	}
+
+	.ship_map {
 		#map_wrap {
 			width: 500px;
 			position: relative;
@@ -341,20 +569,54 @@ export default {
 				height: 400px;
 			}
 
+			@media (max-width:600px) {
+				width: 350px;
+
+				#map {
+					width: 100%;
+					height: 300px;
+				}
+			}
+
 			#search_box {
-				height: 35px;
 				position: absolute;
 				top: 0;
 				left: 0;
 				z-index: 30000;
-				background: rgba(255, 255, 255, .5);
-				padding: 5px 10px;
 
-				input {
-					width: 100px;
-					height: 35px;
-					font-size: 18px;
-					padding-left: 5px;
+				form {
+					background-color: rgba(255, 255, 255, 0.9);
+					padding: 3px 10px;
+					border-radius: 5px;
+					display: flex;
+					align-items: center;
+
+					input {
+						width: 100px;
+						height: 30px;
+						font-size: 18px;
+						padding-left: 5px;
+						margin: 0 5px 0 5px;
+					}
+
+					button {
+						background-color: #7aa5d2;
+						border: none;
+						padding: 2px 5px;
+						border-radius: 5px;
+						color: #111;
+					}
+				}
+
+				@media (max-width: 950px) {
+					form {
+						font-size: 15px;
+
+						input {
+							font-size: 16px;
+						}
+
+					}
 				}
 			}
 
@@ -388,15 +650,99 @@ export default {
 						background: #7aa5d2;
 					}
 				}
+
+				@media (max-width: 950px) {
+					width: 200px;
+					height: calc(100% - 36px);
+					top: 36px;
+					left: 0;
+					background-color: #fff;
+
+					.place {
+						h5 {
+							font-size: 14px;
+						}
+
+						span {
+							font-size: 11px;
+							width: 100%;
+							display: block;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+					}
+				}
 			}
 		}
 	}
 
 	.fishplaceholder {
+
 		input {
+			width: 200px;
+			text-align: center;
+			height: 30px;
+			padding-right: 5px;
+			margin-left: 8px;
+			background-color: #e1e1e1;
+			font-size: 13px;
+			border: 0;
+			border-radius: 15px;
+			outline: none;
+			caret-color: transparent;
+			cursor: pointer;
+
 			&::placeholder {
 				color: #000;
 			}
+		}
+	}
+
+	.ship_fishingtype {
+
+		.fishingtype_wrap {
+			border: 1px solid #ccc;
+			width: 30%;
+			padding: 20px 15px 10px 15px;
+			margin-top: 30px;
+			margin-bottom: 30px;
+			border-radius: 15px;
+			display: flex;
+			flex-wrap: wrap;
+			position: relative;
+			justify-content: center;
+
+			@media (max-width: 600px) {
+				width: 150px;
+			}
+
+			.fishingtype_title {
+				position: absolute;
+				top: -14px;
+				left: 15px;
+				background: #fff;
+			}
+
+			.fishing_type {
+				display: inline-block;
+				width: 150px;
+
+				input {
+					margin-right: 3px;
+				}
+			}
+		}
+	}
+
+	.ship_msg {
+		display: flex;
+		flex-direction: column;
+
+		textarea {
+			max-width: 500px;
+			margin: 7px 10px 0 0;
+			border: 1px solid #ccc;
 		}
 	}
 }

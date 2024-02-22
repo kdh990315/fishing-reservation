@@ -44,8 +44,15 @@
 	flex-direction: column;
 }
 
-@mixin position-center() {
+@mixin position-center-a() {
 	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin position-center-r() {
+	position: relative;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);

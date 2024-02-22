@@ -8,12 +8,13 @@
 @import '@/scss/mixin.scss';
 #notice_wrap {
 	width: 1000px;
+	height: 100%;
 	position: relative;
 
 	img {
 		width: 300px;
 
-		@include position-center;
+		@include position-center-a;
 	}
 }
 </style>

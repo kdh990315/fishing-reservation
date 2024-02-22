@@ -5,4 +5,7 @@ export default {
 	setShipData(state, payload) {
 		state.shipData = payload;
 	},
+	setFilterData(state, payload) {
+		state.shipData = payload;
+	}
 }

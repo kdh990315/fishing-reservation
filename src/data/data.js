@@ -1,3 +1,32 @@
+export const headerMenu = [
+	{
+		mainMenu: '바다낚시',
+		subMenu: [
+			{ sub: '선상낚시' },
+			{ sub: '좌대낚시' },
+			{ sub: '선외기낚시' },
+			{ sub: '바다체험낚시' },
+		]
+	},
+	{
+		mainMenu: '민물낚시',
+		subMenu: [
+			{ sub: '저수지낚시' },
+			{ sub: '좌대낚시' },
+			{ sub: '방갈로낚시' },
+		]
+	},
+	{
+		mainMenu: '커뮤니티',
+		subMenu: [
+			{ sub: '실시간 조황' },
+			{ sub: '이벤트' },
+			{ sub: '대회' },
+			{ sub: '공지사항' },
+		]
+	},
+]
+
 export const categoryData = [
 	{
 		src: '/images/category/category_icon1.png',
@@ -126,3 +155,81 @@ export const allFish = [
 		]
 	}
 ];
+
+export const fishingType = [
+	{
+		id: 1,
+		value: '생미끼 외수질',
+	},
+	{
+		id: 2,
+		value: '침선',
+	},
+	{
+		id: 3,
+		value: '타이라바',
+	},
+	{
+		id: 4,
+		value: '팁런',
+	},
+	{
+		id: 5,
+		value: '지깅',
+	},
+	{
+		id: 6,
+		value: '다운샷',
+	},
+	{
+		id: 7,
+		value: '흘림 찌낚시',
+	},
+	{
+		id: 8,
+		value: '어초',
+	},
+]
+
+export const location = [
+	{
+		id: 1,
+		value: '경기',
+	},
+	{
+		id: 2,
+		value: '전북',
+	},
+	{
+		id: 3,
+		value: '전남',
+	},
+	{
+		id: 4,
+		value: '충남',
+	},
+	{
+		id: 5,
+		value: '충북',
+	},
+	{
+		id: 6,
+		value: '경남',
+	},
+	{
+		id: 7,
+		value: '경북',
+	},
+	{
+		id: 8,
+		value: '강원',
+	},
+	{
+		id: 9,
+		value: '인천',
+	},
+	{
+		id: 10,
+		value: '제주',
+	},
+]

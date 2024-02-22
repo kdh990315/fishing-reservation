@@ -39,6 +39,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/mixin.scss';
+
 #banner_section {
 	width: 100%;
 	margin-top: 150px;
@@ -102,11 +104,11 @@ export default {
 		}
 
 		.slide_control_container {
-			position: absolute;
-			width: 100%;
+			width: 98%;
 			display: flex;
 			justify-content: space-between;
-			top: 48%;
+
+			@include position-center-a;
 
 			.banner_prev,
 			.banner_next {
@@ -120,6 +122,11 @@ export default {
 				&.btn_on {
 					background-color: #ccc;
 					color: #000;
+				}
+
+				@media (max-width: 800px) {
+					font-size: 20px;
+					padding: 0px 8px;
 				}
 			}
 		}

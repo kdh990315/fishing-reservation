@@ -5,30 +5,10 @@
 
 			<nav class="header_nav">
 				<ul class="main_nav">
-					<li @click="toggleMenu(1)">바다낚시
+					<li @click="toggleMenu(idx)" v-for="(mainMenu, idx) in headerMenuData" :key="idx">{{ mainMenu.mainMenu }}
 						<i class="fa-solid fa-angle-down"></i>
-						<ul class="sub_nav" v-if="subOpen === 1">
-							<li><router-link to="/ShipList">선상낚시</router-link></li>
-							<li><router-link to="/ShipList">좌대낚시</router-link></li>
-							<li><router-link to="/ShipList">선외기낚시</router-link></li>
-							<li><router-link to="/ShipList">바다체험낚시</router-link></li>
-						</ul>
-					</li>
-					<li @click="toggleMenu(2)">민물낚시
-						<i class="fa-solid fa-angle-down"></i>
-						<ul class="sub_nav" v-if="subOpen === 2">
-							<li><router-link to="/ShipList">저수지낚시</router-link></li>
-							<li><router-link to="/ShipList">좌대낚시</router-link></li>
-							<li><router-link to="/ShipList">방갈로</router-link></li>
-						</ul>
-					</li>
-					<li @click="toggleMenu(3)">커뮤니티
-						<i class="fa-solid fa-angle-down"></i>
-						<ul class="sub_nav" v-if="subOpen === 3">
-							<li><router-link to="/ShipList">실시간 조황</router-link></li>
-							<li><router-link to="/ShipList">이벤트</router-link></li>
-							<li><router-link to="/ShipList">대회</router-link></li>
-							<li><router-link to="/ShipList">공지사항</router-link></li>
+						<ul class="sub_nav" v-if="subOpen === idx">
+							<li v-for="(subMenu, idx) in mainMenu.subMenu" :key="idx"><router-link to="/ShipList">{{ subMenu.sub }}</router-link></li>
 						</ul>
 					</li>
 				</ul>
@@ -51,36 +31,12 @@
 
 			<div class="mobil_nav" v-if="mobilNavBtn">
 				<ul class="mobil_main_nav">
-					<li>
-						<div class="mobil_main_nav_title" @click="mobilNavToggle(1)">
-							<span>바다낚시</span><i class="fa-solid fa-angle-down"></i>
+					<li v-for="(mainMenu, idx) in headerMenuData" :key="idx">
+						<div class="mobil_main_nav_title" @click="mobilNavToggle(idx)">
+							<span>{{ mainMenu.mainMenu }}</span><i class="fa-solid fa-angle-down"></i>
 						</div>
-						<ul class="mobil_sub_nav" v-if="mobilsubOpen === 1">
-							<li><a href="#">선상낚시</a></li>
-							<li><a href="#">좌대낚시</a></li>
-							<li><a href="#">선외기낚시</a></li>
-							<li><a href="#">바다체험낚시</a></li>
-						</ul>
-					</li>
-					<li>
-						<div class="mobil_main_nav_title" @click="mobilNavToggle(2)">
-							<span>민물낚시</span><i class="fa-solid fa-angle-down"></i>
-						</div>
-						<ul class="mobil_sub_nav" v-if="mobilsubOpen === 2">
-							<li><a href="#">저수지낚시</a></li>
-							<li><a href="#">좌대낚시</a></li>
-							<li><a href="#">방갈로</a></li>
-						</ul>
-					</li>
-					<li>
-						<div class="mobil_main_nav_title" @click="mobilNavToggle(3)">
-							<span>커뮤니티</span><i class="fa-solid fa-angle-down"></i>
-						</div>
-						<ul class="mobil_sub_nav" v-if="mobilsubOpen === 3">
-							<li><a href="#">실시간 조황</a></li>
-							<li><a href="#">이벤트</a></li>
-							<li><a href="#">대회</a></li>
-							<li><a href="#">공지사항</a></li>
+						<ul class="mobil_sub_nav" v-if="mobilsubOpen === idx">
+							<li v-for="(subMenu, idx) in mainMenu.subMenu" :key="idx"><router-link to="/ShipList" @click="mobilNavActive">{{ subMenu.sub }}</router-link></li>
 						</ul>
 					</li>
 				</ul>
@@ -88,7 +44,7 @@
 
 			<div class="backdrop" v-if="searchVisible" @click="searchClose"></div>
 
-			<div class="custom-dialog" v-if="searchVisible">
+			<div class="custom_dialog" v-if="searchVisible">
 				<div class="search_header">
 					<h2>검색하기</h2>
 				</div>
@@ -113,11 +69,15 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import { headerMenu } from '@/data/data.js';
+
 export default {
 	setup() {
 		const store = useStore();
 		const router = useRouter();
 		// 헤더
+		const headerMenuData = headerMenu;
+
 		const subOpen = ref(null);
 		const toggleMenu = (idx) => {
 			if (subOpen.value === idx) {
@@ -177,9 +137,7 @@ export default {
 		const shipNotFound = ref(false);
 
 		const submitSearchForm = () => {
-			const shipData = computed(() => {
-				return store.getters['shipitem/ships'];
-			});
+			const shipData = computed(() => store.getters['shipitem/ships']);
 			const matchShips = shipData.value.filter(ship => ship.name.includes(searchKeyword.value));
 
 			if (!matchShips) {
@@ -198,6 +156,7 @@ export default {
 
 		return {
 			subOpen,
+			headerMenuData,
 			toggleMenu,
 			mobilNavBtn,
 			mobilNavActive,
@@ -212,7 +171,7 @@ export default {
 			shipNotFound,
 			submitSearchForm
 		};
-	},
+	}
 }
 
 </script>
@@ -232,7 +191,7 @@ header {
 		@include center-sb;
 
 		@media (max-width: 1200px) {
-			width: calc(100% - 60px);
+			width: calc(100% - 2px);
 			position: relative;
 		}
 
@@ -428,12 +387,12 @@ header {
 			z-index: 10;
 		}
 
-		.custom-dialog {
+		.custom_dialog {
 			position: fixed;
 			top: 20vh;
 			left: 30%;
 			width: 40%;
-			z-index: 100;
+			z-index: 9999999999;
 			border-radius: 12px;
 			border: none;
 			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
@@ -441,6 +400,14 @@ header {
 			margin: 0;
 			overflow: hidden;
 			background-color: white;
+
+			@media (max-width: 1200px) {
+
+				width: calc(100% - 100px);
+				left: 50%;
+				transform: translateX(-50%);
+			
+			}
 
 			.search_header {
 				background-color: #7aa5d2;
@@ -482,6 +449,5 @@ header {
 			}
 		}
 	}
-
 }
 </style>

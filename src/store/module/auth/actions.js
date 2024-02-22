@@ -18,7 +18,6 @@ export default {
 			throw error;
 		}
 
-		console.log(responseData);
 		context.commit('setUserId', {
 			userId: responseData.localId
 		}, { root: true });

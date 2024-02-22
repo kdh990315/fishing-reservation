@@ -14,10 +14,10 @@
 				</li>
 			</ul>
 
-			<div class="slide_control_container">
-				<span class="prev"><i class="fa-solid fa-angle-left"></i></span>
-				<span class="next"><i class="fa-solid fa-angle-right"></i></span>
-			</div>
+		</div>
+		<div class="slide_control_container">
+			<span class="prev"><i class="fa-solid fa-angle-left"></i></span>
+			<span class="next"><i class="fa-solid fa-angle-right"></i></span>
 		</div>
 	</section>
 </template>
@@ -50,6 +50,7 @@ export default {
 #hoppicks_section {
 	width: 100%;
 	margin-top: 150px;
+	position: relative;
 
 	@media (max-width: 1200px) {
 		width: 800px;
@@ -141,6 +142,7 @@ export default {
 
 				@media (max-width: 800px) {
 					width: 146.6px;
+					height: 300px;
 				}
 
 				.hot_picks_text {
@@ -183,30 +185,40 @@ export default {
 			}
 		}
 
-		.slide_control_container {
-			width: 100%;
-			text-align: center;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			position: absolute;
-			top: 34%;
-			left: 50%;
-			transform: translate(-50%, -50%);
+	}
+	.slide_control_container {
+		width: 30%;
+		text-align: center;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		position: absolute;
+		bottom: 11%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		.prev,
+		.next {
+			font-size: 25px;
+			padding: 2px 12px;
+			background-color: #f3f3f3;
+			color: #afafaf;
+			border-radius: 50%;
+			cursor: pointer;
+
+			&.btn_on {
+				background-color: #ccc;
+				color: #000;
+			}
+		}
+
+		@media (max-width: 800px) {
+			bottom: -1%;
 
 			.prev,
 			.next {
-				font-size: 25px;
-				padding: 2px 12px;
-				background-color: #f3f3f3;
-				color: #afafaf;
-				border-radius: 50%;
-				cursor: pointer;
-
-				&.btn_on {
-					background-color: #ccc;
-					color: #000;
-				}
+				font-size: 20px;
+				padding: 0px 8px;
 			}
 		}
 	}

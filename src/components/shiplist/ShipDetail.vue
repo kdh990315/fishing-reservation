@@ -7,9 +7,9 @@
 		</div>
 		<div class="detail_main_container">
 			<div class="detail_menu_container">
-				<div v-for="(menuData, index) in menuDatas" :key="index" @click="activeMenu(index)"
+				<div v-for="(menuData, index) in menuDatas" :key="index" @click="activeMenu(index); changComponent(menuData.link)"
 					:class="{ 'detail_menu': true, 'on': activeIdx === index }">
-					<a @click="changComponent(menuData.link)">{{ menuData.title }}</a>
+					<span>{{ menuData.title }}</span>
 				</div>
 			</div>
 			<component :is="currentComponent" :shipId="shipId"></component>
@@ -134,6 +134,10 @@ dialog {
 	overflow: hidden;
 	background-color: white;
 
+	@media (max-width: 1250px) {
+		width: calc(100% - 50px);
+	}
+
 	.close {
 		position: absolute;
 		right: 10px;
@@ -178,11 +182,38 @@ dialog {
 				cursor: pointer;
 
 				&.on {
-					background-color: rebeccapurple;
+					background-color: #7aa5d2;
+					color: #fff;
 				}
 			}
 
 
+		}
+
+		@media (max-width: 1200px) {
+			flex-direction: column;
+			align-items: center;
+
+			.detail_menu_container {
+				width: 100%;
+				justify-content: space-around;
+				flex-direction: row;
+				border-bottom: 1px solid #ccc;
+
+				.detail_menu {
+					font-size: 18px;
+					padding: 5px 13px;
+
+					@media (max-width: 700px) {
+						font-size: 16px;
+					}
+				}
+			}
+
+			#introduction_wrap {
+				width: 100%;
+				padding: 10px 20px 20px;
+			}
 		}
 	}
 }

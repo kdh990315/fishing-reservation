@@ -56,7 +56,7 @@ export default {
 				});
 			} catch (err) {
 				error.value = err.message || '오류가 발생하였습니다. 잠시 후 다시 접속해주세요.';
-				alert(error);
+				alert(error.value);
 			}
 
 			isLoading.value = false;

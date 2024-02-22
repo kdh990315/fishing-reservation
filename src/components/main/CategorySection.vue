@@ -74,7 +74,7 @@ export default {
 				.category_div {
 					text-align: center;
 
-					@include position-center;
+					@include position-center-a;
 
 					.category_icon {
 						width: 150px;

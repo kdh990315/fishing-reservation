@@ -9,6 +9,7 @@ export default {
 			departureTime: shipData.departureTime,
 			arrivalTime: shipData.arrivalTime,
 			location: shipData.location,
+			halfOption: shipData.halfOption,
 			port: shipData.departurePlace,
 			departureAddress: shipData.departureAddress,
 			lat: shipData.lat,
@@ -62,6 +63,7 @@ export default {
 				arrivalTime: responseData[key].arrivalTime,
 				location: responseData[key].location,
 				port: responseData[key].port,
+				halfOption: responseData[key].halfOption,
 				departureAddress: responseData[key].departureAddress,
 				lat: responseData[key].lat,
 				lon: responseData[key].lon,
@@ -70,10 +72,22 @@ export default {
 				discription: responseData[key].discription,
 				message: responseData[key].message,
 				safety: '승선 정원의 120%에 해당하는 구명조끼, 구명부환, 소화기, 구명밧줄, 자기발연, 자기발화, 엔진자동 소화기 완전구비함.',
-			}	
+			}
 			shipDatas.push(shipData);
 		}
 
 		context.commit('setShipData', shipDatas);
 	},
-}	
+	filterShips(context, searchData) {
+		const shipdatas = context.getters.ships;
+		const filteredData = shipdatas.filter(shipdata => {
+			// 시간이 일치하는 경우를 필터링합니다.
+			const timeMatch = shipdata.halfOption === searchData.time;
+			// 선택된 지역 중 하나라도 shipdata의 location에 포함되어 있는 경우를 확인합니다.
+			const locationMatch = searchData.location.some(loc => shipdata.location.includes(loc));
+			return timeMatch && locationMatch;
+		});
+		
+		context.commit('setFilterData', filteredData);
+	}
+}
