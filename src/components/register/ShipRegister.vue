@@ -389,7 +389,7 @@ export default {
 			locationReturn();
 
 			// 유효성 검사
-			let isValid = false;
+			let isValid = true;
 
 			for (const key in shipData.value) {
 				if (shipData.value[key].val === '' || shipData.value[key].val.length === 0) {
@@ -401,6 +401,7 @@ export default {
 			if (!isValid) {
 				return;
 			}
+
 
 			const formData = {
 				shipName: shipData.value.shipName.val,

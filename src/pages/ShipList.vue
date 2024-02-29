@@ -73,7 +73,6 @@ export default {
 
 		const asideOpen = () => {
 			asidevisible.value = !asidevisible.value;
-			console.log(asidevisible.value);
 		}
 
 		const innerWidth = ref(true)
@@ -95,8 +94,6 @@ export default {
 				} else {
 					innerWidth.value = false;
 				}
-
-				console.log(innerWidth.value);
 			})
 		});
 

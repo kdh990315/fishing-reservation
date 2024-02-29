@@ -49,6 +49,21 @@
 				text-decoration: line-through;
 			}
 		}
+
+		@media (max-width: 768px) {
+			h5 {
+				font-size: 17px;
+			}
+
+			.warning_text {
+				span {
+					font-size: 16px;
+				}
+				p {
+					font-size: 13px;
+				}
+			}
+		}
 	}
 }
 </style>

@@ -186,13 +186,12 @@ dialog {
 					color: #fff;
 				}
 			}
-
-
 		}
 
 		@media (max-width: 1200px) {
 			flex-direction: column;
 			align-items: center;
+			margin-top: 10px;
 
 			.detail_menu_container {
 				width: 100%;
@@ -205,7 +204,9 @@ dialog {
 					padding: 5px 13px;
 
 					@media (max-width: 700px) {
-						font-size: 16px;
+						span {
+							font-size: 3.5vw;
+						}
 					}
 				}
 			}
