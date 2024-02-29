@@ -1,24 +1,27 @@
-# fishing-reservation
+## 낙시고 - 낚시 예약 사이트
 
-## Project setup
-```
-npm install
-```
+### 프로젝트 개요
+낙시고는 낚시가 취미인 개발자가 자신의 취미를 웹페이지로 만들고자 시작한 프로젝트입니다.<br> 
+이 웹 애플리케이션은 낚시를 즐기는 사람들을 위한 커뮤니티 플랫폼으로서, 사용자들은 선박 등록과 예약을 편리하게 관리할 수 있습니다.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### 주요 기능
+- 로그인 및 회원가입: 사용자는 자체 회원가입을 통해 계정을 생성하거나 테스트용으로 제공되는 아이디를 사용하여 로그인할 수 있습니다.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+  테스트용 아이디:
+  - ID: test@test.com, PW: test123
+  - ID: test1@test.com, PW: test123
+  - ID: test2@test.com, PW: test123
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 선박 등록: 로그인한 사용자는 자신이 소유한 선박을 등록할 수 있습니다. 등록된 선박은 다른 사용자들에게 예약이 가능한 상태가 됩니다.
+
+- 선박 예약: 등록된 선박은 다른 사용자들에게 예약이 가능하며, 사용자는 편리한 예약 시스템을 통해 선박을 예약할 수 있습니다.
+
+- 검색 기능: 사용자는 선박을 특정 조건으로 검색할 수 있습니다. 검색 기능을 통해 사용자는 원하는 조건에 맞는 선박을 빠르게 찾을 수 있습니다.
+
+- 선박 필터링 기능: 사용자는 등록된 선박을 다양한 기준으로 필터링할 수 있습니다. 필터링 기능을 통해 사용자는 원하는 조건에 맞게 선박을 정렬하고 선택할 수 있습니다.
+
+### 기술 스택
+- 프론트앤드: Vue.js
+- 백앤드: firebase
+- API: KAKAO MAP API
