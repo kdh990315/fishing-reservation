@@ -1,3 +1,5 @@
+import { deleteObject, getStorage, listAll, ref } from "firebase/storage";
+
 export default {
 	async registerShip(context, shipData) {
 		const userId = context.rootGetters.userId.userId;
@@ -89,5 +91,28 @@ export default {
 		});
 		
 		context.commit('setFilterData', filteredData);
+	},
+	async deleteShip(_, payload) {
+		const userId = payload;
+
+		const response = await fetch(
+			`https://fishing-reservation-54646-default-rtdb.firebaseio.com/shipData/${userId}.json`,
+			{
+				method: 'DELETE',
+			}
+		)
+
+		if(!response.ok) {
+			// ...error
+		}
+
+		const storage = getStorage();
+		const desertRef = ref(storage, `images/${userId}/`);
+		const imgList = await listAll(desertRef);
+
+		imgList.items.forEach(async (item) => {
+			await deleteObject(item);
+		});
+		
 	}
 }

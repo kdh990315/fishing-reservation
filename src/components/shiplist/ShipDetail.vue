@@ -33,16 +33,7 @@ export default {
 		const store = useStore();
 
 		const shipId = ref(props.NewShipId);
-		// const shipData = ref(null);
 
-		// watchEffect(() => {
-		// 	const shipDatas = store.getters['shipitem/ships'];
-		// 	const data = shipDatas.find(ship => ship.id === props.NewShipId);
-		// 	if (data) {
-		// 		shipData.value = data;
-		// 		console.log(shipData.value);
-		// 	}
-		// });
 		const shipDatas = store.getters['shipitem/ships'];
 		const shipData = ref('');
 		onMounted(() => {
@@ -53,11 +44,6 @@ export default {
 				}
 			});
 		});
-
-		// const shipData = computed(() => {
-		// 	const shipDatas = ref(store.getters['shipitem/ships']);
-		// 	return shipDatas.value.find(ship => ship.id === shipId.value);
-		// });
 
 		const closeDialog = () => {
 			emit('closeShipDetail');

@@ -66,7 +66,6 @@ export default {
 			} finally {
 				isLoading.value = false;
 			}
-			
 		});
 
 		const shipdata = computed(() => {

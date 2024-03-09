@@ -197,10 +197,10 @@ export default {
 
 	.intro_search_box {
 		width: 1000px;
-		height: 200px;
-		background-color: #fff;
-		margin: 30px auto 0;
-		border-radius: 10px;
+    height: 150px;
+    background-color: #fff;
+    margin: 80px auto 0;
+    border-radius: 10px;
 
 		@media (max-width:1000px) {
 			width: calc(100% - 50px);
@@ -215,8 +215,8 @@ export default {
 
 			.wrap {
 				width: 230px;
-				height: 110px;
-				background-color: #f5f5f5;
+				height: 75px;
+				background-color: rgb(245, 245, 246);
 				border-radius: 20px;
 				position: relative;
 
@@ -225,7 +225,7 @@ export default {
 				.selected {
 					width: 170px;
 					height: 40px;
-					background-color: #c7c7c7;
+					background-color: #fff;
 					border-radius: 10px;
 					line-height: 40px;
 					text-align: center;
@@ -233,7 +233,7 @@ export default {
 				}
 
 				.input_wrap {
-					width: 270px;
+					width: 320px;
 					min-height: 120px;
 					background-color: #fff;
 					border-radius: 25px;
@@ -319,7 +319,7 @@ export default {
 					}
 
 					.fish_wrap {
-						padding: 12px;
+						padding: 0px 12px 12px;
 
 						.fish_box {
 
@@ -327,6 +327,7 @@ export default {
 								text-align: center;
 								font-size: 16px;
 								padding: 2px 0;
+								margin-bottom: 5px;
 							}
 
 							.line {

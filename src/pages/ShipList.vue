@@ -7,7 +7,8 @@
 			<warning-section></warning-section>
 			<div class="btn_Box">
 				<base-button :mode="'asideBtn'" @click="asideOpen">조건 검색하기</base-button>
-				<base-button @click="checkRegister" v-if="loginStatu">선박 등록하기</base-button>
+				<base-button @click="checkRegister" v-if="loginState && !deleteBtnVisible">선박 등록하기</base-button>
+				<base-button @click="deleteShip" v-if="loginState && deleteBtnVisible">선박 삭제하기</base-button>
 			</div>
 			<aside class="ship_aside_mobil" v-if="asidevisible && !innerWidth">
 				<ship-aside></ship-aside>
@@ -44,6 +45,10 @@ export default {
 
 		const NewShipId = ref('');
 
+		const ShipDatas = computed(() => {
+			return store.getters['shipitem/ships'];
+		});
+
 		const showShipDetail = (shipId) => {
 			ShipDetailVisible.value = true;
 			NewShipId.value = shipId;
@@ -53,22 +58,35 @@ export default {
 			ShipDetailVisible.value = false;
 		}
 
-		const loginStatu = computed(() => {
+		const loginState = computed(() => {
 			return store.getters['auth/isToken'];
 		});
 
 		const checkRegister = () => {
-			router.replace('/ShipRegister')
-			// for (let i = 0; i < shipdata.value.length; i++) {
-			// 	if (shipdata.value[i].id === localStorage.userId) {
-			// 		alert('이미 선박이 등록되어 있습니다.');
-			// 		router.replace('/ShipList')
-			// 	} else {
-			// 		router.push('/ShipRegister');
-			// 	}
-			// }
+			for(let shipData of ShipDatas.value) {
+				if(shipData.id === localStorage.userId) {
+					alert('선박이 이미 등록되었습니다.');
+					return;
+				} else {
+					router.replace('/ShipRegister')
+				}
+			}
 		}
 
+		const deleteShip = () => {
+			store.dispatch('shipitem/deleteShip', localStorage.userId);
+		}
+
+		const deleteBtnVisible = computed(() => {
+			for(let shipData of ShipDatas.value) {
+				if(shipData.id === localStorage.userId) {
+					return true;
+				}
+			}
+
+			return false;
+		});
+		
 		const asidevisible = ref(false);
 
 		const asideOpen = () => {
@@ -84,7 +102,7 @@ export default {
 			} else {
 				innerWidth.value = false;
 			}
-		})
+		});
 
 		watchEffect(() => {
 			window.addEventListener('resize', () => {
@@ -102,11 +120,13 @@ export default {
 			showShipDetail,
 			closeShipDetail,
 			NewShipId,
-			loginStatu,
+			loginState,
 			checkRegister,
 			asideOpen,
 			asidevisible,
-			innerWidth
+			innerWidth,
+			deleteShip,
+			deleteBtnVisible
 		}
 	}
 }
