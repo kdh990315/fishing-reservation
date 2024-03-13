@@ -164,14 +164,14 @@ export default {
 		.intro_img {
 			width: 1000px;
 			height: 100%;
-			background-image: url('@/assets/images/intro_bg.jpg');
+			background-image: url('https://fishing-reservation-54646.web.app/assets/images/intro_bg.jpg');
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: cover;
 			border-radius: 1rem;
 			margin-left: auto;
 		}
-
+		
 		.intro_form_container {
 			width: 25%;
 			position: absolute;
