@@ -7,6 +7,7 @@
 
 ### 기술 스택
 - 프론트앤드: Vue.js
+  - ㅂㅈㅇㅂㅈㅇ
 - 백앤드: firebase
 - API: KAKAO MAP API
 - 배포: firebase
