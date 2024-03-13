@@ -480,7 +480,7 @@ export default {
 			height: 30px;
 			padding-left: 10px;
 			margin-left: 8px;
-			background-color: #e1e1e1;
+			background-color: #f9f9f9;
 			font-size: 15px;
 			border: 0;
 			border-radius: 15px;
@@ -495,7 +495,7 @@ export default {
 			height: 30px;
 			padding-left: 10px;
 			margin-left: 8px;
-			background-color: #e1e1e1;
+			background-color: #f9f9f9;
 			font-size: 15px;
 			border: 0;
 			border-radius: 15px;
@@ -516,7 +516,7 @@ export default {
 			height: 30px;
 			padding-left: 10px;
 			margin-left: 8px;
-			background-color: #e1e1e1;
+			background-color: #f9f9f9;
 			font-size: 15px;
 			border: 0;
 			border-radius: 15px;
@@ -538,7 +538,7 @@ export default {
 			padding-left: 10px;
 			padding-right: 5px;
 			margin-left: 8px;
-			background-color: #e1e1e1;
+			background-color: #f9f9f9;
 			font-size: 13px;
 			border: 0;
 			border-radius: 15px;
@@ -686,7 +686,7 @@ export default {
 			height: 30px;
 			padding-right: 5px;
 			margin-left: 8px;
-			background-color: #e1e1e1;
+			background-color: #f9f9f9;
 			font-size: 13px;
 			border: 0;
 			border-radius: 15px;

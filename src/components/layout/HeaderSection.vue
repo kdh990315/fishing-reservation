@@ -243,6 +243,7 @@ header {
 						background-color: #fff;
 						padding: 10px;
 						border-radius: 15px;
+						z-index: 10000;
 
 						li {
 							font-size: 12px;

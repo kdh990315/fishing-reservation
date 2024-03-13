@@ -1,91 +1,82 @@
 <template>
 	<section id="schedule_section">
-		<div class="intro_text">
-			<h1>출조 준비 되셨나요?</h1>
-		</div>
-		<div class="intro_search_box">
-			<form @submit.prevent="submitForm">
-				<div class="timeoption_select_wrap wrap">
-					<div class="selected_timeoption selected" @click="open('timeInput')">
-						<span>{{ searchData.time === '' ? '시간배/종일배' : searchData.time }}</span>
-					</div>
-					<div class="selected_input_wrap input_wrap" v-if="inputvisible.timeInput">
-						<div class="input_title">
-							<h2>시간배/종일배</h2>
-							<i class="fa-solid fa-xmark" @click="close('timeInput')"></i>
-						</div>
-						<div class="input_main">
-							<div class="time_wrap">
-								<label for="half_time" :class="{ 'active': searchData.time === '시간배' }">시간배</label>
-								<input type="radio" name="ship_type" value="시간배" id="half_time" v-model="searchData.time">
-								<label for="all_time" :class="{ 'active': searchData.time === '종일배' }">종일배</label>
-								<input type="radio" name="ship_type" value="종일배" id="all_time" v-model="searchData.time">
-							</div>
-						</div>
+		<div class="intro_container">
+			<div class="intro_img"></div>
+			<div class="intro_form_container">
+				<h6>출조를 준비중이신가요?</h6>
 
-						<div class="ok_btn">
-							<p @click="close('timeInput')">확인</p>
-						</div>
-					</div>
-				</div>
-				<div class="location_select_wrap wrap">
-					<div class="selected_location selected" @click="open('locationInput')">
-						<span>{{ searchData.location.length === 0 ? '지역선택' : searchData.location.join(',') }}</span>
-					</div>
-					<div class="location_input_wrap input_wrap" v-if="inputvisible.locationInput">
-						<div class="input_title">
-							<h2>지역선택</h2>
-							<i class="fa-solid fa-xmark" @click="close('locationInput')"></i>
-						</div>
-						<div class="input_main">
-							<div class="location_wrap">
-								<div class="location_box" v-for="loc in locationData" :key="loc.id">
-									<label :for="loc.id" :class="{ 'active': searchData.location.includes(loc.value) }">{{
-										loc.value }}</label>
-									<input type="checkbox" :name="loc.id" :id="loc.id" :value="loc.value"
-										v-model="searchData.location">
+				<div class="intro_search_box">
+					<form @submit.prevent="submitForm">
+						<div class="timeoption_select_wrap wrap">
+							<div class="input_main">
+								<div class="time_wrap">
+									<input type="radio" name="ship_type" value="시간배" id="half_time"
+										v-model="searchData.time">
+									<label for="half_time" :class="{ 'active': searchData.time === '시간배' }">시간배</label>
+									<input type="radio" name="ship_type" value="종일배" id="all_time"
+										v-model="searchData.time">
+									<label for="all_time" :class="{ 'active': searchData.time === '종일배' }">종일배</label>
 								</div>
 							</div>
 						</div>
 
-						<div class="ok_btn">
-							<p @click="close('locationInput')">확인</p>
-						</div>
-					</div>
-				</div>
-				<div class="fish_select_wrap wrap">
-					<div class="selected_fish selected" @click="open('fishInput')">
-						<span>{{ searchData.fish.length === 0 ? '어종선택' : searchData.fish.join(',') }}</span>
-					</div>
-					<div class="fish_input_wrap input_wrap" v-if="inputvisible.fishInput">
-						<div class="input_title">
-							<h2>어종선택</h2>
-							<i class="fa-solid fa-xmark" @click="close('fishInput')"></i>
-						</div>
-						<div class="fish_wrap">
-							<div class="fish_box" v-for="(group, idx) in allFishData" :key="idx">
-								<p class="fish_title">{{ group.title }}</p>
-								<div class="line"></div>
-								<div class="fish_select_box">
-									<div class="fish_data" v-for="fish in group.fishName" :key="fish.id">
-										<label :for="fish.id" :class="{ 'active': searchData.fish.includes(fish.name) }">{{
-											fish.name }}</label>
-										<input type="checkbox" :name="fish.id" :id="fish.id" :value="fish.name"
-											v-model="searchData.fish">
+						<div class="location_select_wrap wrap">
+							<span class="location_title">지역선택</span>
+							<div class="selected_location selected" :class="{ 'active': inputvisible.locationInput }">
+								<span @click="open('locationInput')" class="selected_placeholder">{{
+						searchData.location.length === 0 ? '지역선택' : searchData.location.join(',') }}</span>
+								<div class="location_input_wrap input_wrap" v-if="inputvisible.locationInput">
+									<div class="input_main">
+										<div class="location_wrap">
+											<div class="location_box" v-for="loc in locationData" :key="loc.id"
+												:class="{ 'active': searchData.location.includes(loc.value) }">
+												<label :for="loc.id">{{ loc.value }}</label>
+												<input type="checkbox" :name="loc.id" :id="loc.id" :value="loc.value"
+													v-model="searchData.location">
+											</div>
+										</div>
+									</div>
+
+									<div class="ok_btn">
+										<p @click="close('locationInput')">확인</p>
 									</div>
 								</div>
 							</div>
 						</div>
 
-						<div class="ok_btn">
-							<p @click="close('fishInput')">확인</p>
+						<div class="fish_select_wrap wrap">
+							<span class="fish_title">어종선택</span>
+							<div class="selected_fish selected" :class="{ 'active': inputvisible.fishInput }">
+								<span @click="open('fishInput')" class="selected_placeholder">{{ searchData.fish.length
+						=== 0 ? '어종선택' : searchData.fish.join(',') }}</span>
+
+								<div class="fish_input_wrap input_wrap" v-if="inputvisible.fishInput">
+									<div class="fish_wrap">
+										<div class="fish_box" v-for="(group, idx) in allFishData" :key="idx">
+											<p class="fish_group">{{ group.title }}</p>
+											<div class="fish_select_box">
+												<div class="fish_data" v-for="fish in group.fishName" :key="fish.id"
+													:class="{ 'active': searchData.fish.includes(fish.name) }">
+													<label :for="fish.id">{{ fish.name }}</label>
+													<input type="checkbox" :name="fish.id" :id="fish.id"
+														:value="fish.name" v-model="searchData.fish">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="ok_btn">
+										<p @click="close('fishInput')">확인</p>
+									</div>
+
+								</div>
+							</div>
 						</div>
 
-					</div>
+						<base-button mode="intro_btn">찾아보기</base-button>
+					</form>
 				</div>
-
-				<base-button>찾아보기</base-button>
-			</form>
+			</div>
 		</div>
 	</section>
 </template>
@@ -104,7 +95,7 @@ export default {
 		const allFishData = allFish;
 
 		const searchData = ref({
-			time: '',
+			time: '시간배',
 			location: [],
 			fish: [],
 		});
@@ -129,27 +120,20 @@ export default {
 
 				router.replace('/SearchList');
 			}
-
-			console.log(searchData.value);
-
-
 		}
 
 		const inputvisible = ref({
-			timeInput: false,
 			locationInput: false,
 			fishInput: false,
 		});
 
 		const open = (ev) => {
-			inputvisible.value[ev] = true;
+			inputvisible.value[ev] = !inputvisible.value[ev];
 		}
 
 		const close = (ev) => {
-			inputvisible.value[ev] = false;
+			inputvisible.value[ev] = !inputvisible.value[ev];
 		}
-
-
 
 		return {
 			locationData,
@@ -169,238 +153,278 @@ export default {
 
 #schedule_section {
 	width: 100%;
-	height: 600px;
-	background-image: url('@/assets/images/intro_bg.jpg');
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	border-radius: 30px;
+	height: 650px;
 	margin-top: 35px;
-	padding-top: 100px;
 
-	@media (max-width: 800px) {
-		padding-top: 30px;
-	}
+	.intro_container {
+		width: 100%;
+		height: 100%;
+		position: relative;
 
-	.intro_text {
-		text-align: center;
-
-		h1 {
-			font-size: 70px;
-			padding-top: 35px;
-
-			@media (max-width: 800px) {
-				font-size: 9vw;
-			}
-		}
-	}
-
-	.intro_search_box {
-		width: 1000px;
-    height: 150px;
-    background-color: #fff;
-    margin: 80px auto 0;
-    border-radius: 10px;
-
-		@media (max-width:1000px) {
-			width: calc(100% - 50px);
-			margin: 70px auto 0 auto;
-		}
-
-		form {
-			width: 100%;
+		.intro_img {
+			width: 1000px;
 			height: 100%;
+			background-image: url(http://localhost:8080/img/intro_bg.0d45b584.jpg);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			border-radius: 1rem;
+			margin-left: auto;
+		}
 
-			@include center-sa;
+		.intro_form_container {
+			width: 25%;
+			position: absolute;
+			top: 50%;
+			left: 5%;
+			transform: translateY(-50%);
+			background-color: #fff;
+			box-shadow: 0px 0px 40px rgba(29, 58, 83, 0.1);
+			border-radius: 1rem;
 
-			.wrap {
-				width: 230px;
-				height: 75px;
-				background-color: rgb(245, 245, 246);
-				border-radius: 20px;
-				position: relative;
+			h6 {
+				font-size: 1.3rem;
+				padding: 1.2rem 1.6rem;
+				border-bottom: 1px solid #efefef;
+				letter-spacing: 0.04rem;
+			}
 
-				@include center;
+			.intro_search_box {
+				padding: 1.6rem;
 
-				.selected {
-					width: 170px;
-					height: 40px;
-					background-color: #fff;
-					border-radius: 10px;
-					line-height: 40px;
-					text-align: center;
-					cursor: pointer;
-				}
-
-				.input_wrap {
-					width: 320px;
-					min-height: 120px;
-					background-color: #fff;
-					border-radius: 25px;
-					border: 1px solid #ccc;
-
-					@include position-center-a;
-
-					.input_title {
-						position: relative;
-						width: 100%;
-						height: 40px;
-						border-bottom: 1px solid #ccc;
-
-						h2 {
-							font-size: 18px;
-							@include position-center-a;
-						}
-
-						i {
-							font-size: 22px;
-							position: absolute;
-							right: 11px;
-							top: 10px;
-							cursor: pointer;
-						}
-					}
+				.timeoption_select_wrap {
 
 					.input_main {
-						min-height: 80px;
-						position: relative;
 
 						.time_wrap {
-							@include position-center-a;
-
-							label {
-								border: 1px solid #ccc;
-								padding: 0 3px;
-								border-radius: 5px;
-								margin-right: 10px;
-								cursor: pointer;
-							}
-
-							.active {
-								background-color: #7aa5d2;
-								color: #fff;
-							}
+							display: flex;
 
 							input {
-								display: none;
-							}
-						}
+								margin-right: 7px;
 
-						.location_wrap {
-							display: flex;
-							flex-wrap: wrap;
-							justify-content: center;
-							position: absolute;
-							top: 50%;
-							transform: translateY(-50%);
-
-							.location_box {
-								display: inline-block;
-								margin: 5px 0;
-
-								label {
-									border: 1px solid #ccc;
-									padding: 0 3px;
-									border-radius: 5px;
-									margin-right: 10px;
-									cursor: pointer;
-								}
-
-								.active {
+								&:checked {
 									background-color: #7aa5d2;
-									color: #fff;
-								}
-
-								input {
-									display: none;
+									border-color: #7aa5d2;
 								}
 							}
-						}
-					}
 
-					.fish_wrap {
-						padding: 0px 12px 12px;
+							label {
+								margin-right: 1rem;
+								color: #747579;
 
-						.fish_box {
-
-							.fish_title {
-								text-align: center;
-								font-size: 16px;
-								padding: 2px 0;
-								margin-bottom: 5px;
-							}
-
-							.line {
-								width: 100%;
-								height: 1px;
-								margin-bottom: 5px;
-								background-color: #ccc;
-							}
-
-							.fish_select_box {
-								display: flex;
-								flex-wrap: wrap;
-
-								.fish_data {
-									display: inline-block;
-									margin: 5px 0;
-
-									label {
-										border: 1px solid #ccc;
-										padding: 0 3px;
-										border-radius: 5px;
-										margin-right: 10px;
-										cursor: pointer;
-									}
-
-									.active {
-										background-color: #7aa5d2;
-										color: #fff;
-									}
-
-									input {
-										display: none;
-									}
+								&.active {
+									color: #000;
 								}
 							}
 						}
 					}
+				}
 
-					.ok_btn {
+				.location_select_wrap {
+					width: 100%;
+					margin-top: 25px;
+					position: relative;
+
+
+					.location_title {
+						background-color: #fff;
+						padding: 1px 2px;
+						position: absolute;
+						top: -11px;
+						left: 16px;
+						color: #8d8d8d;
+						font-size: 0.85rem;
+					}
+
+					.selected {
+						width: 100%;
+						border-radius: 1rem;
 						text-align: center;
+						border: 1px solid #c5c5c7;
 
-						p {
-							border-top: 1px solid #ccc;
-							padding: 5px 0;
-							border-radius: 0 0 25px 25px;
-							background-color: #7aa5d2;
+						&.active {
+							border: 1px solid #000;
+							border-radius: 1rem 1rem 0 0;
+						}
+
+						.selected_placeholder {
+							display: block;
+							width: 100%;
+							padding: 0.65rem 0;
 							cursor: pointer;
+						}
+
+						.location_input_wrap {
+							border: 1px solid #000;
+							background-color: #fff;
+							z-index: 30000;
+							position: absolute;
+							width: 100%;
+							left: 0;
+
+							.input_main {
+								max-height: 200px;
+								overflow-y: scroll;
+								scrollbar-width: none;
+
+								.location_wrap {
+
+									.location_box {
+										padding: .5rem;
+										cursor: pointer;
+
+										&.active {
+											background-color: rgba(122, 165, 210, .3);
+										}
+
+										&:hover {
+											background-color: rgba(122, 165, 210, .3);
+										}
+
+										label {
+											width: 100%;
+											cursor: pointer;
+											display: block;
+										}
+
+										input {
+											display: none;
+										}
+									}
+								}
+							}
+
+							.ok_btn {
+								color: #fff;
+								background-color: #272323;
+								padding: .35rem;
+								cursor: pointer;
+							}
+						}
+					}
+				}
+
+				.fish_select_wrap {
+					width: 100%;
+					margin-top: 35px;
+					position: relative;
+
+					.fish_title {
+						background-color: #fff;
+						padding: 1px 2px;
+						position: absolute;
+						top: -11px;
+						left: 16px;
+						color: #8d8d8d;
+						font-size: 0.85rem;
+					}
+
+					.selected {
+						width: 100%;
+						border-radius: 1rem;
+						text-align: center;
+						border: 1px solid #c5c5c7;
+
+						&.active {
+							border: 1px solid #000;
+							border-radius: 1rem 1rem 0 0;
+						}
+
+						.selected_placeholder {
+							display: block;
+							width: 100%;
+							padding: 0.65rem 0;
+							cursor: pointer;
+						}
+
+						.fish_input_wrap {
+							border: 1px solid #000;
+							background-color: #fff;
+							z-index: 30000;
+							position: absolute;
+							width: 100%;
+							left: 0;
+
+							.fish_wrap {
+								max-height: 350px;
+								overflow-y: scroll;
+								scrollbar-width: none;
+								font-size: 15px;
+
+								.fish_box {
+									border-bottom: 1px solid #e7e7e7;
+
+									.fish_group {
+										font-size: 16px;
+										background-color: rgba(189, 189, 189, .3);
+										padding: 0.3rem;
+									}
+
+									.fish_select_box {
+										margin-bottom: .5rem;
+
+										.fish_data {
+											padding: .5rem;
+											cursor: pointer;
+
+											&:hover {
+												background-color: rgba(122, 165, 210, .3);
+											}
+
+											&.active {
+												background-color: rgba(122, 165, 210, .3);
+											}
+
+											label {
+												display: block;
+												width: 100%;
+											}
+
+											input {
+												display: none;
+											}
+										}
+									}
+								}
+							}
+
+							.ok_btn {
+								color: #fff;
+								background-color: #272323;
+								padding: .35rem;
+								cursor: pointer;
+							}
 						}
 					}
 				}
 			}
 		}
 
-		@media (max-width: 800px) {
-			width: calc(100% - 50px);
-			height: 322px;
+		@media (max-width: 1200px) {
 
-			form {
-				height: auto;
-				flex-direction: column;
+			.intro_img {
+				width: calc(100% - 100px);
+				margin: 0 auto;
+			}
 
-				.wrap {
-					width: 280px;
-					height: 70px;
-					margin: 15px auto;
-					border-bottom: 1px solid #ccc;
+			.intro_form_container {
+				width: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+		}
 
-					.selected {
-						width: 190px;
-						height: 35px;
-						line-height: 35px;
-					}
-				}
+		@media (max-width: 600px) {
+
+			.intro_img {
+				width: calc(100% - 10px);
+				margin: 0 auto;
+			}
+
+			.intro_form_container {
+				width: 80%;
+				left: 50%;
+				transform: translate(-50%, -50%);
 			}
 		}
 	}

@@ -77,4 +77,12 @@ a {
 		display: none;
 	}
 }
+
+.intro_btn {
+	width: 100%;
+	padding: 0.25rem 0.8rem;
+	background-color: #000;
+	border: none;
+	margin: 1.5rem auto 0 auto;
+}
 </style>
