@@ -164,7 +164,7 @@ export default {
 		.intro_img {
 			width: 1000px;
 			height: 100%;
-			background-image: url(http://localhost:8080/img/intro_bg.0d45b584.jpg);
+			background-image: url('@/assets/images/intro_bg.jpg');
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: cover;
