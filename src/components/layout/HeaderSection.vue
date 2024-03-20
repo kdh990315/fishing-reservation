@@ -22,10 +22,9 @@
 				<i class="fa-solid fa-magnifying-glass search_icon" @click="searchDislogVisible"></i>
 
 				<div class="login_btn">
-					<base-button :link=false @click="logOut" v-if="isToken"><i
-							class="fa-solid fa-right-to-bracket"></i>로그아웃</base-button>
-					<base-button :link=true to="/LoginSection" v-else><i
-							class="fa-solid fa-right-to-bracket"></i>로그인</base-button>
+					<base-button :link="true" to="/ManagementSection" v-if="isAuth">예약관리</base-button>
+					<base-button :link=false @click="logOut" v-if="isToken"><i class="fa-solid fa-right-to-bracket"></i>로그아웃</base-button>
+					<base-button :link=true to="/LoginSection" v-else><i class="fa-solid fa-right-to-bracket"></i>로그인</base-button>
 				</div>
 			</div>
 
@@ -65,7 +64,7 @@
 </template>
 
 <script>
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -75,7 +74,7 @@ export default {
 	setup() {
 		const store = useStore();
 		const router = useRouter();
-		// 헤더
+		//pc버전 헤더
 		const headerMenuData = headerMenu;
 
 		const subOpen = ref(null);
@@ -87,7 +86,7 @@ export default {
 				subOpen.value = idx;
 			}
 		};
-		// 모바일헤더
+		//모바일보전 헤더
 		const mobilNavBtn = ref(false);
 		const mobilsubOpen = ref(null);
 		const mobilNavActive = () => {
@@ -104,8 +103,7 @@ export default {
 		// 로그인/로그아웃
 		const isToken = ref(store.getters['auth/isToken']);
 
-		watch(
-			() => store.getters['auth/isToken'],
+		watch(() => store.getters['auth/isToken'],
 			(newValue) => {
 				isToken.value = newValue;
 			}
@@ -136,8 +134,11 @@ export default {
 
 		const shipNotFound = ref(false);
 
+		const shipData = computed(() => store.getters['shipitem/ships']);
+
+		//검색 데이터 제출
 		const submitSearchForm = () => {
-			const shipData = computed(() => store.getters['shipitem/ships']);
+			
 			const matchShips = shipData.value.filter(ship => ship.name.includes(searchKeyword.value));
 
 			if (!matchShips) {
@@ -149,10 +150,13 @@ export default {
 
 			searchClose();
 
-			nextTick(() => {
-				router.replace('/SearchList');
-			});
+			router.replace('/SearchList');
 		}
+
+		//로그인 여부 확인
+		const isAuth = computed(() => {
+			return store.getters['auth/isToken'];
+		})
 
 		return {
 			subOpen,
@@ -169,7 +173,8 @@ export default {
 			searchClose,
 			searchKeyword,
 			shipNotFound,
-			submitSearchForm
+			submitSearchForm,
+			isAuth,
 		};
 	}
 }
@@ -373,6 +378,13 @@ header {
 				margin: 0 15px;
 				padding: 5px;
 				cursor: pointer;
+			}
+
+			.login_btn {
+
+				i {
+					margin-right: 5px;
+				}
 			}
 		}
 

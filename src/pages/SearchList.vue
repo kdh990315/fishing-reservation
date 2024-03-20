@@ -43,12 +43,9 @@ export default {
 		const searchedLength = computed(() => {
 			return seachedItem.value ? seachedItem.value.length : '';
 		});
-
+		//firebase storage에서 이미지 가져오기
 		const shipLoadImg = async (shipId, idx) => {
 			const storage = getStorage();
-
-			// const storageRefPath = `gs://fishing-reservation-54646.appspot.com/images/` + shipId + `/img0`;
-			// const storageRefPath = `images/${shipId}/img0`;
 			const storageRef1 = storageRef(storage, `images/${shipId}/img0`);
 
 			try {
@@ -60,7 +57,7 @@ export default {
 				return;
 			}
 		}
-
+		//firebase storage에서 이미지 가져오기
 		const NewShipId = ref('')
 
 		const shipDetailvisible = ref(false);

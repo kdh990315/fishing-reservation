@@ -99,7 +99,7 @@ export default {
 			location: [],
 			fish: [],
 		});
-
+		//데이터 제출
 		const submitForm = () => {
 			if (searchData.value.time === '' && searchData.value.location.length === 0 && searchData.value.fish === 0) {
 				alert('최소 한가지 조건을 설정해주세요');

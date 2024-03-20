@@ -119,6 +119,7 @@ export default {
 		//**데이터**
 		const fishingTypeData = fishingType;
 
+		//데이터 유효성 검사
 		const shipData = ref({
 			shipName: {
 				val: '',
@@ -332,16 +333,6 @@ export default {
 		//**카카오 지도**
 
 		//**시간변환**
-		// const changeTime = computed(() =>{ 
-		// 	const departure = new Date(`2020-01-01T${shipData.value.departureTime}`);
-		// 	const arrival = new Date(`2020-01-01T${shipData.value.arrivalTime}`);
-		// 	const differenceTime = arrival - departure;
-
-		// 	const hours = Math.floor(differenceTime / (1000 * 60 * 60));
-		// 	const minutes = Math.floor(differenceTime % (1000 * 60 * 60) / (1000 * 60));
-
-		// 	return { hours, minutes }
-		// });
 		const changeTime = ref({ hours: 0, minutes: 0 });
 
 		watchEffect(() => {
@@ -402,7 +393,7 @@ export default {
 				return;
 			}
 
-
+			//데이터를 변환
 			const formData = {
 				shipName: shipData.value.shipName.val,
 				people: shipData.value.people.val,
@@ -438,12 +429,10 @@ export default {
 			shipData,
 			changeTime,
 			submitForm,
-			//kakao map
 			keyword,
 			searchKeyword,
 			searchData,
 			addLatLng,
-			//kakao map
 			fileChange,
 			fishingTypeData,
 			clearValid

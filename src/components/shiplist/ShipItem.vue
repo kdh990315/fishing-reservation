@@ -38,6 +38,7 @@ export default {
 			emit('showShipDetail', shipId);
 		};
 
+		//firebase storage에서 이미지 가져오기
 		const shipImages = ref([]);
 
 		const fetchImages = async () => {
@@ -53,6 +54,7 @@ export default {
 				}
 			}
 		};
+		//firebase storage에서 이미지 가져오기
 
 		onMounted(async () => {
 			isLoading.value = true;

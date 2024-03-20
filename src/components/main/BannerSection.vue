@@ -55,6 +55,12 @@ export default {
 		margin: 150px auto 0 auto;
 	}
 
+	@media (max-width: 500px) {
+		width: 450px;
+		margin: 150px auto 0 auto;
+	}
+
+
 	.banner_container {
 		width: 100%;
 		height: 300px;
@@ -114,13 +120,11 @@ export default {
 			.banner_next {
 				font-size: 25px;
 				padding: 2px 12px;
-				background-color: #f3f3f3;
 				color: #afafaf;
 				border-radius: 50%;
 				cursor: pointer;
 
 				&.btn_on {
-					background-color: #ccc;
 					color: #000;
 				}
 

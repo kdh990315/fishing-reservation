@@ -139,14 +139,14 @@ export default {
 		}
 		//예약인원 증감
 
-		//input error
+		//예약 데이터 유효성 검사
 		const inputError = ref({
 			name: false,
 			phone: false,
 		});
-		//input error
+		//예약 데이터 유효성 검사
 
-		//submit Form
+		//데이터 제출
 		const submitForm = () => {
 			if(reservationData.value.reservationName === '' && reservationData.value.reservationPhone === '') {
 				inputError.value.name = true;
@@ -182,7 +182,9 @@ export default {
 			}
 
 		}
-		//submit Form
+		//데이터 제출
+
+		//선박의 최대 인원 구하기
 		const shipDatas = computed(() => store.getters['shipitem/ships']);
 
 		const maximumPeople = ref('');
@@ -198,7 +200,7 @@ export default {
 		const reservationDatas = computed(() =>
 			store.getters['reservation/reservationData'].filter(data => data.month === selectedMonth.value)
 		);
-
+		//선박의 남은 자리 구하기
 		const updatePeople = (day) => {
 			const reservationsDay = reservationDatas.value.filter(data => data.day === day);
 

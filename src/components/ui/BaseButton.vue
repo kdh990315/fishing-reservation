@@ -52,7 +52,8 @@ a {
 	}
 
 	@media (max-width: 1000px) {
-		font-size: 14px;	
+		padding: 0.25rem 0.65rem;
+		font-size: 13px;	
 	}
 }
 

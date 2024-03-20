@@ -62,6 +62,7 @@ export default {
 			return store.getters['auth/isToken'];
 		});
 
+		//선박 등록하기
 		const checkRegister = () => {
 			for(let shipData of ShipDatas.value) {
 				if(shipData.id === localStorage.userId) {
@@ -73,6 +74,7 @@ export default {
 			}
 		}
 
+		//선박 삭제하기
 		const deleteShip = () => {
 			store.dispatch('shipitem/deleteShip', localStorage.userId);
 		}
@@ -93,6 +95,8 @@ export default {
 			asidevisible.value = !asidevisible.value;
 		}
 
+
+		//반응형 aside
 		const innerWidth = ref(true)
 
 		onMounted(() => {

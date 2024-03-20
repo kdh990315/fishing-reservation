@@ -62,6 +62,11 @@ export default {
 		margin: 150px auto 0 auto;
 	}
 
+	@media (max-width: 550px) {
+		width: 100%;
+		margin: 150px auto 0 auto;
+	}
+
 	.hot_picks_title {
 
 		h3 {
@@ -201,7 +206,6 @@ export default {
 		.next {
 			font-size: 25px;
 			padding: 2px 12px;
-			background-color: #f3f3f3;
 			color: #afafaf;
 			border-radius: 50%;
 			cursor: pointer;

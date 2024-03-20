@@ -73,25 +73,14 @@ export default {
 				shipData.value = data;
 			}
 
-			// const script = document.createElement('script');
 			/* global kakao */
-			// script.onload = () => kakao.maps.load(initMap);
-			// script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=0700e8a59649fa1750ac6f51c839e252&autoload=false&libraries=services';
-			// document.head.appendChild(script);
+
 			loadScript();
 			store.dispatch('shipitem/setShipData');
 		});
 
 		//카카오 지도
-		// onMounted(() => {	
-		// 	const script = document.createElement('script');
-		// 	/* global kakao */
-		// 	script.onload = () => kakao.maps.load(initMap);
-		// 	script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=0700e8a59649fa1750ac6f51c839e252&autoload=false&libraries=services';
-		// 	document.head.appendChild(script);
 
-		// 	// window.kakao && window.kakako.maps ? initMap() : loadScript();
-		// });
 		//스크립트 소스 가져오기
 		const loadScript = () => {
 			const script = document.createElement('script');

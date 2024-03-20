@@ -10,6 +10,7 @@ import SignUpSection from '@/components/auth/SignUpSection.vue';
 import ShipRegister from '@/components/register/ShipRegister.vue';
 
 import store from "@/store/index.js";
+import ManagementSection from "./components/management/ManagementSection.vue";
 
 const router = createRouter({
 	history: createWebHashHistory(),
@@ -38,6 +39,11 @@ const router = createRouter({
 		{
 			path: '/ShipRegister',
 			component: ShipRegister,
+			meta: { requiresRegister: true },
+		},
+		{
+			path: '/ManagementSection',
+			component: ManagementSection,
 			meta: { requiresRegister: true },
 		},
 	]

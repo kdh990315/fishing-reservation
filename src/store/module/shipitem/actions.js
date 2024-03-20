@@ -72,6 +72,7 @@ export default {
 				fishName: responseData[key].fishName,
 				fishingType: responseData[key].fishingType,
 				discription: responseData[key].discription,
+				rservation: responseData[key].rservation,
 				message: responseData[key].message,
 				safety: '승선 정원의 120%에 해당하는 구명조끼, 구명부환, 소화기, 구명밧줄, 자기발연, 자기발화, 엔진자동 소화기 완전구비함.',
 			}
