@@ -211,7 +211,6 @@ export default {
 			cursor: pointer;
 
 			&.btn_on {
-				background-color: #ccc;
 				color: #000;
 			}
 		}
